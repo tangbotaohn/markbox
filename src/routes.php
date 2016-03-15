@@ -2,11 +2,7 @@
 // Show Routes
 $app->get('/', function ($request, $response, $args) {
     $a = new Posts();
+	$a->entry('/test');
+	print_r($a->getFilesInfo());
 });
 
-// Author Routes
-$app->group('/author', function () {
-    $this->get('/login', function ($request, $response, $args) {
-        return $this->renderer->render($response, 'index.phtml');
-    });
-});
