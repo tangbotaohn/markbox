@@ -2,7 +2,7 @@
 require '../Sort.php';
 $path = [realpath('./dir_test.php'),realpath('./sort_test.php')];
 
-$dir = new Markbox\FileManager\Sort($path);
+$dir = new FileManager\Sort($path);
 
 print_r($dir->getList());
 

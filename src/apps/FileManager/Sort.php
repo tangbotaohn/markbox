@@ -1,10 +1,16 @@
 <?php
+/**
+* 类 Sort 提供了 Markbox 目录文件的排序操作。
+*
+* @link http://github.com/tmkook/markbox
+*
+* @copyright (c) 2016 tmkook.
+* @license MIT
+*
+* @version $Id: Sort.php
+*/
 
-namespace Markbox\FileManager;
-
-class SortException extends \Exception
-{
-}
+namespace FileManager;
 
 class Sort
 {
@@ -12,27 +18,30 @@ class Sort
 
     private $sorttime = [];
 
-    public function __construct($data)
+    //初始化
+    public function __construct(array $data)
     {
-        if (!is_array($data)) {
-            throw new SortException('data error');
-        }
         $this->list = $data;
         foreach ($data as $k => $v) {
             $this->sorttime[] = $this->getFiletime($v);
         }
     }
 
+    //获取列表
     public function getList()
     {
         return $this->list;
     }
 
+    //获取排序时间
     public function getSorttime()
     {
         return $this->sorttime;
     }
 
+    // 对数组进行排序
+    // asc  升序
+    // desc 降序
     public function orderBy($type = 'desc')
     {
         $list = [];
@@ -58,6 +67,7 @@ class Sort
         return $this;
     }
 
+    //获取文件更新时间
     private function getFiletime($file)
     {
         $mtime = filemtime($file);
@@ -74,4 +84,8 @@ class Sort
 
         return $mtime;
     }
+}
+
+class SortException extends \Exception
+{
 }

@@ -1,14 +1,16 @@
 <?php
 // Show Routes
 $app->get('/', function ($request, $response, $args) {
-    $a = new Category();
-	print_r($a->getSubFiles());
+    $assign = [];
+	$category = new Category();
+	$assign['categories'] = $category->get();
+	$assign['posts'] = $category->getSubFiles();
+	$this->renderer->render($response, 'index.phtml', $assign);
 });
 
-$app->get('/post', function ($request, $response, $args) {
-	$post = new Posts(new Category(),'test.md');
-	$post->addText('# test title');
-	$post->save();
-	
+$app->get('/post/{category}/{name}', function ($request, $response, $args) {
+	$post = new Posts(new Category(),$args['name'].'.md');
 	echo $post->parsedown();
 });
+
+
