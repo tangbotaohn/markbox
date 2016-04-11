@@ -2,19 +2,27 @@
 
 class Posts
 {
-    //post dir
-    const BASE = __DIR__.'/../../storages/posts/';
-
-    //construct
-    public function __construct()
+	private $category;
+	private $filename;
+	private $text;
+    public function __construct(Category $category,$filename)
     {
+		$this->category = $category;
+		$this->filename = $filename;
     }
+	
+	public function addText($text){
+		$this->text = $text;
+	}
+	
+	public function save(){
+		return $this->category->getFolder()->addFile($this->filename,$this->text);
+	}
 
-    //return parsedown html string
-    public function parsedownFile($filename)
+    // return parsedown html string
+    public function parsedown()
     {
-        $file = self::BASE.'/'.trim($filename, '/');
-        $md = file_get_contents($file);
+        $md = $this->category->getFolder()->getFile($this->filename);
         $parse = new Parsedown();
 
         return $markdown = $parse->text($md);

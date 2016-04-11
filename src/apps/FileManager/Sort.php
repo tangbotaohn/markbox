@@ -2,6 +2,10 @@
 
 namespace Markbox\FileManager;
 
+class SortException extends \Exception
+{
+}
+
 class Sort
 {
     private $list = [];
@@ -11,7 +15,7 @@ class Sort
     public function __construct($data)
     {
         if (!is_array($data)) {
-            throw new Exception('data error');
+            throw new SortException('data error');
         }
         $this->list = $data;
         foreach ($data as $k => $v) {
@@ -41,7 +45,7 @@ class Sort
         } elseif ($type == 'asc') {
             asort($list);
         } else {
-            throw new \Exception('order by type error');
+            throw new SortException('order by type error');
         }
 
         $i = 0;

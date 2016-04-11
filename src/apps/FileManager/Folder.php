@@ -1,6 +1,10 @@
 <?php
 
-namespace Markbox\FileManager;
+namespace FileManager;
+
+class FolderException extends \Exception
+{
+}
 
 class Folder
 {
@@ -14,7 +18,7 @@ class Folder
     {
         $path = realpath($path);
         if (!is_dir($path)) {
-            throw new \Exception('not found dir');
+            throw new FolderException("not found dir {$path}");
         }
 
         $obj = new self();
@@ -37,14 +41,14 @@ class Folder
     {
         $name = trim($name, '/');
         if (empty($name)) {
-            throw new \Exception('create name error');
+            throw new FolderException('create name error');
         }
         $name = $this->CURRENT.$name.'/';
         if (is_dir($name)) {
             return true;
         }
 
-        return @mkdir($name, 077);
+        return @mkdir($name, 0777);
     }
 
     public function rename($oldname, $newname)
@@ -52,15 +56,15 @@ class Folder
         $oldname = trim($oldname, '/');
         $newname = trim($newname, '/');
         if (empty($oldname)) {
-            throw new \Exception('oldname is error');
+            throw new FolderException('oldname is error');
         }
         if (empty($newname)) {
-            throw new \Exception('newname is error');
+            throw new FolderException('newname is error');
         }
         $oldname = $this->CURRENT.$oldname.'/';
         $newname = $this->CURRENT.$newname.'/';
         if (!is_dir($oldname)) {
-            throw new \Exception('oldname not exists');
+            throw new FolderException('oldname not exists');
         }
 
         return @rename($oldname, $newname);
@@ -78,6 +82,16 @@ class Folder
 
         return (bool) file_put_contents($name, $body);
     }
+	
+	public function getFile($name){
+		$name = trim($name, '/');
+        $file = $this->CURRENT.$name;
+		if(!file_exists($file)){
+			throw new FolderException("file not found '{$name}'");
+		}
+		
+        return file_get_contents($file);
+	}
 
     public function delFile($name)
     {
@@ -89,6 +103,18 @@ class Folder
 
         return @unlink($name);
     }
+	
+	public function clean(){
+		$files = glob($this->CURRENT.'*');
+		foreach($files as $file){
+			if(is_dir($file)){
+				@rmdir($file);
+			}else{
+				@unlink($file);
+			}
+		}
+		return true;
+	}
 
     public function getSubDirectories()
     {
@@ -105,7 +131,7 @@ class Folder
     public function getSubFiles($type = '*')
     {
         if ($type != '*' && !strchr($type, '.')) {
-            throw new \Exception('error type');
+            throw new FolderException('error type');
         }
         $files = glob($this->CURRENT.$type, GLOB_NOSORT);
 
@@ -123,7 +149,7 @@ class Folder
         $path = trim($path, '/');
         $path = '/'.$path.'/';
         if (!is_dir($path)) {
-            throw new \Exception('path error');
+            throw new FolderException('path error');
         }
         $files = glob($path.'*', GLOB_ONLYDIR | GLOB_MARK | GLOB_NOSORT);
         if (!empty($files)) {
@@ -142,7 +168,7 @@ class Folder
         $path = trim($path, '/');
         $path = '/'.$path.'/';
         if (!is_dir($path)) {
-            throw new \Exception('path error');
+            throw new FolderException('path error');
         }
         $files = glob($path.$type, GLOB_NOSORT);
         if (!empty($files)) {
