@@ -23,7 +23,7 @@ class Sort
     {
         $this->list = $data;
         foreach ($data as $k => $v) {
-            $this->sorttime[] = $this->getFiletime($v);
+            $this->sorttime[$k] = $this->getFiletime($v);
         }
     }
 
@@ -39,14 +39,43 @@ class Sort
         return $this->sorttime;
     }
 
-    // 对数组进行排序
+    // 时间排序
     // asc  升序
     // desc 降序
-    public function orderBy($type = 'desc')
+    public function orderByTime($type = 'desc')
     {
         $list = [];
         foreach ($this->list as $k => $v) {
             $list[$v] = $this->sorttime[$k];
+        }
+
+        if ($type == 'desc') {
+            arsort($list);
+        } elseif ($type == 'asc') {
+            asort($list);
+        } else {
+            throw new SortException('order by type error');
+        }
+
+        $i = 0;
+        foreach ($list as $k => $v) {
+            $this->list[$i] = $k;
+            $this->sorttime[$i] = $v;
+            ++$i;
+        }
+
+        return $this;
+    }
+	
+	// 名字排序
+    // asc  升序
+    // desc 降序
+    public function orderByName($type = 'desc')
+    {
+        $list = [];
+        foreach ($this->list as $k => $v) {
+			$item = explode('/',trim($v,'/'));
+            $list[$v] = end($item);
         }
 
         if ($type == 'desc') {

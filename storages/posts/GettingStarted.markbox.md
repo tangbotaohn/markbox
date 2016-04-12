@@ -1,6 +1,6 @@
 # Markbox 使用指南
 
-![wiki icon](./pics/20160316/markbox-logo.jpg)
+![wiki icon](/index.php/uploads/img/markbox-logo.jpg)
 
 `版本：beta 1`
 

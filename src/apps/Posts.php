@@ -1,41 +1,63 @@
 <?php
 /**
-* 类 Posts 提供了 Markbox 的 md 文件管理功能。
+* 类 Posts 提供了对 storages/posts 目录下的文件管理操作。
 *
 * @link http://github.com/tmkook/markbox
 *
 * @copyright (c) 2016 tmkook.
 * @license MIT
 *
-* @version $Id: Category.php
+* @version $Id: Posts.php
 */
+require 'FileManager/Folder.php';
+require 'FileManager/Sort.php';
+require 'FileManager/Page.php';
 class Posts
 {
-    private $category;
-    private $filename;
-    private $text;
-    public function __construct(Category $category, $filename)
+    //post dir
+    private $base = __DIR__ .'/../../storages/posts/';
+	private $category;
+	private $realpath;
+    private $folder;
+
+    //construct
+    public function __construct($category = '')
     {
-        $this->category = $category;
-        $this->filename = $filename;
+		$this->base = realpath($this->base);
+        $this->category = trim($category,'/');
+        $this->realpath = realpath($this->base.'/'.$this->category);
+        $this->folder = FileManager\Folder::open($this->realpath);
+    }
+	
+	public function getCategory(){
+		return $this->category;
+	}
+
+    public function getFolder()
+    {
+        return $this->folder;
     }
 
-    public function addText($text)
+    public function getCategories()
     {
-        $this->text = $text;
+        $subdir = $this->folder->getSubDirectories();
+		$sort = new FileManager\Sort($subdir);
+		return $sort;
     }
 
-    public function save()
+    public function getSubFiles($curent_page)
     {
-        return $this->category->getFolder()->addFile($this->filename, $this->text);
+        $files = $this->folder->getSubFiles('*.md');
+		
+        return $this->stripBase($files);
     }
 
-    // return parsedown html string
-    public function parsedown()
+    private function stripBase(array $paths)
     {
-        $md = $this->category->getFolder()->getFile($this->filename);
-        $parse = new Parsedown();
+        foreach ($paths as $k => $item) {
+            $paths[$k] = trim(str_replace($this->base, '', $item), '/');
+        }
 
-        return $markdown = $parse->text($md);
+        return $paths;
     }
 }
