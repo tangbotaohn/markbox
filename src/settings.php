@@ -15,6 +15,6 @@ return [
         'keyword' => 'markdown,blog,markbox',
     ],
     'users' => [
-        ['username' => 'tmkook', 'password' => '123456', 'role' => 'master'],
+        ['username' => 'tmkook', 'password' => '123456'],
     ],
 ];
