@@ -14,9 +14,9 @@ namespace FileManager;
 
 class FileSort
 {
-    private $list = [];
+    private $list = array();
 
-    private $sorttime = [];
+    private $sorttime = array();
 
     //初始化
     public function __construct(array $data)
@@ -44,7 +44,7 @@ class FileSort
     // desc 降序
     public function orderByTime($type = 'desc')
     {
-        $list = [];
+        $list = array();
         foreach ($this->list as $k => $v) {
             $list[$v] = $this->sorttime[$k];
         }
@@ -72,7 +72,7 @@ class FileSort
     // desc 降序
     public function orderByName($type = 'desc')
     {
-        $list = [];
+        $list = array();
         foreach ($this->list as $k => $v) {
 			$item = explode('/',trim($v,'/'));
             $list[$v] = end($item);

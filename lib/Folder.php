@@ -145,7 +145,7 @@ class Folder
     //获取当前目录下的所有目录
     public function getAllDirectories()
     {
-        return $this->scanAllDirs([], $this->CURRENT);
+        return $this->scanAllDirs(array(), $this->CURRENT);
     }
 
     //获取当前目录下的子文件
@@ -162,7 +162,7 @@ class Folder
     //获取当前目录下的所有文件
     public function getAllFiles($type = '*.php')
     {
-        return $this->scanAllFiles([], $this->CURRENT, $type);
+        return $this->scanAllFiles(array(), $this->CURRENT, $type);
     }
 
     //递归获取目录
