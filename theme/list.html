@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="theme/css/bootstrap.min.css">
+<link rel="stylesheet" href="theme/css/bootstrap-theme.min.css">
+<link href="theme/css/home.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="posts/images/icon.jpg">
+<title>Leon - Markbox</title>
+</head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" style="opacity:.9" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="./">write@Markbox</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="write.php">Write</a></li>
+					<li class="active"><a href="list.php">List</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div style="padding-top: 70px">
+	  <div class="container" style="width:960px;">
+		  <div class="panel panel-default">
+			<div class="panel-heading">
+			  <h3 class="panel-title">Markdown List</h3>
+			</div>
+			<ul class="list-group">
+			  <?php foreach($list as $item): ?>
+				<li class="list-group-item clearfix">
+					<div class="pull-left">
+						<a href="wiki.php?read=<?php echo $item['link'] ?>"><?php echo $item['title'] ?></a>
+					</div>
+					
+					<div class="pull-right">
+						<span style="color:#CCC;"><?php echo date('Y-m-d H:i',$item['updated_at']); ?></span>　
+						<a href="write.php?filename=<?php echo $item['link'] ?>" class="btn btn-xs btn-primary">修改</a>
+						<a href="write.php?del=<?php echo $item['link'] ?>" class="btn btn-xs btn-danger">删除</a>
+					</div>
+				</li>
+			  <?php endforeach; ?>
+			</ul>
+		  </div>
+	  </div>
+	</div>
+	
+	<div class="page">
+		<a href="?page=<?php echo $page->getPrev() ?>">上一页</a>
+		<?php foreach($page->getBack() as $k=>$v): ?>
+		<a href="?page=<?php echo $v ?>"><?php  echo $v ?></a>
+		<?php endforeach; ?>
+		<span><?php  echo $page->getShow() ?></span>
+		<?php foreach($page->getGoing() as $k=>$v): ?>
+		<a href="?page=<?php echo $v ?>"><?php  echo $v ?></a>
+		<?php endforeach; ?>
+		<a href="?page=<?php echo $page->getNext() ?>">下一页</a>
+	</div>
+    <script src="theme/js/jquery.min.js"></script>
+    <script src="theme/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,6 +1,0 @@
-[27-Jul-2016 07:22:09 UTC] PHP Fatal error:  Uncaught Error: Class 'ApiExceptionHandler' not found in /vagrant/markbox/src/middleware.php:6
-Stack trace:
-#0 /vagrant/markbox/public/index.php(21): require()
-#1 {main}
-  thrown in /vagrant/markbox/src/middleware.php on line 6
-[27-Jul-2016 07:34:42 UTC] PHP Notice:  Undefined index: username in /vagrant/markbox/src/routes.php on line 23

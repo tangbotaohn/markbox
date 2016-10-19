@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="theme/css/bootstrap.min.css">
+<link rel="stylesheet" href="theme/css/bootstrap-theme.min.css">
+<link href="theme/css/home.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="posts/images/icon.jpg">
+<title>Leon - Markbox</title>
+</head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" style="opacity:.9" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="./">Leon@Markbox</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="active"><a href="./">Markbox</a></li>
+					<li><a href="https://github.com/tmkook" target="_blank">Github</a></li>
+					<li><a href="/wiki.php?read=resume.md" target="_blank">Resume</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="row" style="padding-top: 70px">
+		<form method="post" class="form-inline" style="text-align:center;">
+			<h3>Login - Markbox</h3>
+			<div style="margin:20px auto;"><input type="password" class="form-control" id="pwd" name="password" tabindex="1" style="width:320px" placeholder="请输入登录密码"></div>
+			<div><button class="btn btn-primary">登录</button></div>
+		</form>
+	</div>
+	
+    <script src="theme/js/jquery.min.js"></script>
+    <script src="theme/js/bootstrap.min.js"></script>
+	<script>
+		window.onload = function(){
+			document.getElementById('pwd').focus();
+		}
+	</script>
+</body>
+</html>
