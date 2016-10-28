@@ -32,7 +32,9 @@ class Vender
 	
 	private function makeFolder(){
 		require 'vender/Folder.php';
-		return new Markbox\Folder(dirname(dirname(__FILE__)).'/markbox/mdfiles/');
+		$folder = new Markbox\Folder();
+		$folder->setPath(dirname(dirname(__FILE__)).'/markbox/mdfiles/');
+		return $folder;
 	}
 	
 	private function makePage(){

@@ -17,7 +17,7 @@ class Folder
     private $CURRENT = './';
 
     //工厂方法 - 获取操作对象
-    public function __construct($path)
+    public function setPath($path)
     {
         $path = realpath($path);
         if (!is_dir($path)) {
@@ -202,6 +202,10 @@ class FileListSort
     private $list = array();
 
     private $sorttime = array();
+	
+	private $title = array();
+	
+	private $content = array();
 
     //初始化
     public function __construct(array $data)
@@ -226,6 +230,31 @@ class FileListSort
 		
         return $this->sorttime;
     }
+	
+	//获取内容
+	public function getContent(){
+		if(empty($this->content)){
+			foreach($this->list as $k=>$file){
+				$main = file_get_contents($file);
+				$this->content[$k] = $main;
+			}
+		}
+		
+		return $this->content;
+	}
+	
+	//获取标题
+	public function getTitle(){
+		if(empty($this->title)){
+			$content = $this->getContent();
+			foreach($content as $k=>$main){
+				preg_match("|\# .*|",$main, $content);
+				$this->title[$k] = str_replace('# ','',$content[0]);
+			}
+		}
+		
+		return $this->title;
+	}
 
     // 时间排序
     // asc  升序
@@ -247,7 +276,7 @@ class FileListSort
         }
 
         $i = 0;
-		$this->list = $this->sorttime = array();
+		$this->list = $this->sorttime  = $this->title = $this->content = array();
         foreach ($list as $k => $v) {
             $this->list[$i] = $k;
             $this->sorttime[$i] = $v;
@@ -277,7 +306,7 @@ class FileListSort
         }
 
         $i = 0;
-		$this->list = $this->sorttime = array();
+		$this->list = $this->sorttime = $this->title = $this->content = array();
         foreach ($list as $k => $v) {
             $this->list[$i] = $k;
             ++$i;
