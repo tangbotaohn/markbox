@@ -16,12 +16,54 @@ class Markbox
 	private $vender;
 	public function __construct(){
 		$this->vender = new Vender();
+		session_start();
 	}
 
 	public function isInstalled(){
 		$settings = $this->vender->Config->get('settings');
 		$users = $this->vender->Config->get('users');
 		return !(empty($settings) || empty($users));
+	}
+
+	public function config($name){
+		return $this->vender->config->get($name);
+	}
+
+	public function setConfig($name,$value){
+		$this->vender->config->set($name,$value);
+		return $this->vender->config->save($name);
+	}
+
+	public function login($username,$password){
+		$users = $this->config('users');
+		$user = array();
+		foreach ($users as $k => $value) {
+			if($value['usrename'] == $username){
+				$user = $value;
+				break;
+			}
+		}
+		if(empty($user)){
+			throw new Exception("用户名或密码错误");
+		}
+		$settings = $this->config('settings');
+		$password = md5($password.$settings['salt']);
+		if($password != $user['password']){
+			throw new Exception("用户名或密码错误");
+		}
+
+		return $_SESSION['login'] = $user;
+	}
+
+	public function getLogin(){
+		return empty($_SESSION['login'])? '' : $_SESSION['login'];
+	}
+
+	public function checkLogin(){
+		if(empty($_SESSION['login']) || empty($_SESSION['login']['username'])){
+			header("Location:index.php?m=admin&c=login");
+			exit;
+		}
 	}
 	
 	public function addDir($name){
@@ -40,17 +82,31 @@ class Markbox
 	public function delFile(){
 		return $this->vender->folder->delFile($name);
 	}
+
+	public function folderDown($name){
+		$dir = $this->vender->folder->getPath();
+		$next = $dir.trim($name,'/');
+		$this->vender->folder->setPath($next);
+		return true;
+	}
+
+	public function folderUp($name){
+		$dir = $this->vender->folder->getPath();
+		$next = dirname($dir);
+		$this->vender->folder->setPath($next);
+		return true;
+	}
 	
-	public function getList($page,$order='desc'){
+	public function getList($show,$order='desc'){
 		$page = $this->vender->page;
 		$md = $this->vender->folder->get('*.md');
 		$md->orderByTime($order);
 		$list = $md->getList();
 		$total = count($list);
-		$page->setPage($total,$page);
+		$page->setPage($total,$show);
 		$limit = $page->getLimit();
 		$list = array_slice($list,$limit[0],$limit[1]);
-		$md = new FileListSort($list);
+		$md = new Markbox\FileListSort($list);
 		$sorttime = $md->getSorttime();
 		$title = $md->getTitle();
 		$data = array();

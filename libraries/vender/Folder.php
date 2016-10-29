@@ -16,7 +16,7 @@ class Folder
 {
     private $CURRENT = './';
 
-    //工厂方法 - 获取操作对象
+    //初始化目录
     public function setPath($path)
     {
         $path = realpath($path);
@@ -25,10 +25,20 @@ class Folder
         }
 
         $this->CURRENT = '/'.trim($path, '/').'/';
+        $this->getModeObjects = $this->scanModeObjects = array();
+    }
+
+    public function getCurrent(){
+        $dir = dirname($this->CURRENT);
+        $name = trim(str_replace($dir,'',$this->CURRENT),'/');
+        if(empty($name)){
+            return '/';
+        }
+        return $name;
     }
 
     //获取当前对象的路径
-    public function getCurrent()
+    public function getPath()
     {
         return $this->CURRENT;
     }

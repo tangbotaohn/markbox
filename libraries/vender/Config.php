@@ -40,7 +40,7 @@ class Config
 					$file = FALSE;
 				}
 			}
-			if( ! $file) throw new Exception("不存在的配置文件");
+			if( ! $file) throw new \Exception("不存在的配置文件");
 		}
 
 		//返回配置项
@@ -49,7 +49,7 @@ class Config
 		if(is_array($path) && !empty($path)){
 			foreach($path as $key){
 				if(!isset($conf[$key])){
-					throw new Exception("不存在的配置项");
+					throw new \Exception("不存在的配置项");
 				}
 				$conf = $conf[$key];
 			}
@@ -117,7 +117,7 @@ class Config
 		if($save_file){
 			return file_put_contents($save_file,$data);
 		}else{
-			throw new Exception("保存的的配置文件不存在");
+			throw new \Exception("保存的的配置文件不存在");
 		}
 	}
 	
