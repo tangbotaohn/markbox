@@ -30,10 +30,24 @@ class Vender
 		return new Markbox\Config(dirname(dirname(__FILE__)).'/storages/configs/');
 	}
 	
-	private function makeFolder(){
+	private function makeMdfiles(){
 		require 'vender/Folder.php';
 		$folder = new Markbox\Folder();
 		$folder->setPath(dirname(dirname(__FILE__)).'/storages/mdfiles/');
+		return $folder;
+	}
+	
+	private function makePublish(){
+		require 'vender/Folder.php';
+		$folder = new Markbox\Folder();
+		$folder->setPath(dirname(dirname(__FILE__)).'/storages/publish/');
+		return $folder;
+	}
+	
+	private function makeRecycles(){
+		require 'vender/Folder.php';
+		$folder = new Markbox\Folder();
+		$folder->setPath(dirname(dirname(__FILE__)).'/storages/recycles/');
 		return $folder;
 	}
 	

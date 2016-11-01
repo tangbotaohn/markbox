@@ -13,13 +13,14 @@ if(empty($app->getLogin())){
 	response(array('msg'=>'未登录'),2);
 }
 
-if($_GET['mod'] == 'file'){
-	$list = $app->getFiles();
-	response($list);
-}else if($_GET['mod'] == 'fold'){
-	$list = $app->getFolds();
-	response($list);
-}else if($_GET['mod'] == 'read'){
-	$list = $app->getContent($_GET['file']);
-	response($list);
+if(!empty($_GET['mod'])){
+	$method = $_GET['mod'];
+	if($method == 'content'){
+		$result = $app->content($_GET['type'],$_GET['t']);
+	}else if(!empty($_GET['t'])){
+		$result = $app->{$method}($_GET['t']);
+	}else{
+		$result = $app->{$method}();
+	}
+	response($result);
 }

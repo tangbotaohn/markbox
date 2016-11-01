@@ -7,7 +7,7 @@
 * @copyright (c) 2016 tmkook.
 * @license MIT
 *
-* @version $Id: Folder.php
+* @version $Id: Markbox.php
 */
 require 'Vender.php';
 
@@ -76,47 +76,20 @@ class Markbox
 		}
 	}
 	
-	public function addDir($name){
-		return $this->vender->folder->create($name);
-	}
-	
-	public function delDir(){
-		$this->vender->folder->clean();
-		return $this->vender->folder->remove($name);
-	}
-	
-	public function addFile($name,$body){
-		return $this->vender->folder->addFile($name,$body);
-	}
-	
-	public function delFile(){
-		return $this->vender->folder->delFile($name);
-	}
-
-	public function folderDown($name){
-		$dir = $this->vender->folder->getPath();
-		$next = $dir.trim($name,'/');
-		$this->vender->folder->setPath($next);
-		return true;
-	}
-
-	public function folderUp($name){
-		$dir = $this->vender->folder->getPath();
-		$next = dirname($dir);
-		$this->vender->folder->setPath($next);
-		return true;
-	}
-	
-	public function getFiles($dir=''){
-		if(!empty($dir)){
-			$this->folderDown($dir);
+	public function mdfiles($dir=''){
+		$base = $this->vender->mdfiles->getPath();
+		if(empty($dir)){
+			$md = $this->vender->mdfiles->scan('*.md');
+		}else{
+			$path = $this->vender->mdfiles->getPath();
+			$next = $path.trim($dir,'/');
+			$this->vender->mdfiles->setPath($next);
+			$md = $this->vender->mdfiles->get('*.md');
 		}
-		$md = $this->vender->folder->get('*.md');
 		$list = $md->getList();
 		$sorttime = $md->getSorttime();
 		$title = $md->getTitle();
 		$data = array();
-		$base = $this->vender->folder->getPath();
 		foreach($list as $k=>$v){
 			$data[$k]['file'] = str_replace($base,'',$v);
 			$data[$k]['time'] = $sorttime[$k];
@@ -125,27 +98,54 @@ class Markbox
 		return $data;
 	}
 	
-	public function getFolds($dir=''){
-		if(!empty($dir)){
-			$this->folderDown($dir);
-		}
-		$md = $this->vender->folder->get('*','dir');
+	public function mdfolds(){
+		$base = $this->vender->mdfiles->getPath();
+		$md = $this->vender->mdfiles->get('*','dir');
 		$list = $md->getList();
 		$sorttime = $md->getSorttime();
 		$data = array();
 		foreach($list as $k=>$v){
-			$data[$k]['title'] = basename($v);
-			$data[$k]['file'] = $v;
+			$data[$k]['file']  = trim(str_replace($base,'',$v),'/');
+			$data[$k]['time']  = $sorttime[$k];
+			$data[$k]['title'] = $data[$k]['file'];
+		}
+		return $data;
+	}
+
+	public function publish(){
+		$base = $this->vender->publish->getPath();
+		$md = $this->vender->publish->get('*.md');
+		$list = $md->getList();
+		$sorttime = $md->getSorttime();
+		$title = $md->getTitle();
+		$data = array();
+		foreach($list as $k=>$v){
+			$data[$k]['file'] = str_replace($base,'',$v);
 			$data[$k]['time'] = $sorttime[$k];
+			$data[$k]['title'] = $title[$k];
 		}
 		return $data;
 	}
 	
-	public function getContent($file){
-		$path = $this->vender->folder->getPath();
-		$content = file_get_contents($path.$file);
-		return $this->vender->parsedown->text($content);
+	public function recycles(){
+		$base = $this->vender->recycles->getPath();
+		$md = $this->vender->recycles->get('*.md');
+		$list = $md->getList();
+		$sorttime = $md->getSorttime();
+		$title = $md->getTitle();
+		$data = array();
+		foreach($list as $k=>$v){
+			$data[$k]['file'] = str_replace($base,'',$v);
+			$data[$k]['time'] = $sorttime[$k];
+			$data[$k]['title'] = $title[$k];
+		}
+		return $data;
 	}
 	
+	public function content($type,$file){
+		$path = dirname($this->vender->mdfiles->getPath()).'/';
+		$content = file_get_contents($path.$type.'/'.$file);
+		return $this->vender->parsedown->text($content);
+	}
 
 }

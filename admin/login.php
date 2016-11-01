@@ -6,8 +6,12 @@ if(!$app->installed()){
 }
 
 if(!empty($_POST)){
-	if($app->login($_POST['username'],$_POST['password'])){
-		header("Location:./");
+	try{
+		if($app->login($_POST['username'],$_POST['password'])){
+			header("Location:./");
+		}
+	}catch($e Exception){
+		exit($e->getMessage());
 	}
 }
 
