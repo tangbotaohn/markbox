@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name = "format-detection" content = "telephone=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="keywords" content="markbox,install">
+<meta name="description" content="安装markbox">
+<title>markbox installing...</title>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<style>
+table td,table th{text-align:center;}
+</style>
+</head>
+<body>
+<div class="container" style="width:920px;margin-top:60px;">
+	<div class="panel panel-default">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">第一步 - 目录权限检查</div>
+	  <div class="panel-body">
+		<p>检查目录是否可读写，如果检查没有全部通过请先设置目录权限再进行下一步，否则可能导致部分功能缺失。</p>
+		<p>设置目录权限命令：<span>chmod -R 777 storages</span></p>
+	  </div>
+	  <!-- Table -->
+	  <table class="table">
+		<tr>
+		<th>目录</th>
+		<th>读</th>
+		<th>写</th>
+		</tr>
+		<?php $next = true; ?>
+		<?php foreach($power as $k=>$v): ?>
+		<?php if(!$v['r'] || !$v['w']) $next = false; ?>
+		<tr>
+		<td><?= $k ?></td>
+		<td><span class="label label-<?= $classname[$v['r']] ?>"><?= $name[$v['r']] ?></span></td>
+		<td><span class="label label-<?= $classname[$v['w']] ?>"><?= $name[$v['w']] ?></span></td>
+		</tr>
+		<?php endforeach; ?>
+	  </table>
+	</div>
+	<div style="text-align:center;"><a href="?step=settings" class="btn btn-<?= $classname[$next] ?>">下一步</a></div>
+</div>
+</body>
+</html>

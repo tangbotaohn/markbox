@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name = "format-detection" content = "telephone=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="renderer" content="webkit">
+<meta name="keywords" content="markbox,install">
+<meta name="description" content="安装markbox">
+<title>markbox installing...</title>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" style="width:920px;margin-top:60px;">
+	<div class="panel panel-default">
+	  <div class="panel-heading">第二步 - 设置网站信息</div>
+	  <div class="panel-body">
+		<form role="form" method="post" id="install">
+		  <div class="form-group">
+			<label for="sitename">网站标题</label>
+			<input type="email" class="form-control" id="sitename" name="settings[sitename]" placeholder="网站标题">
+		  </div>
+		  <div class="form-group">
+			<label for="username">用户名</label>
+			<input type="text" class="form-control" id="username" name="user[username]" placeholder="用户名">
+		  </div>
+		  <div class="form-group">
+			<label for="email">邮箱地址</label>
+			<input type="text"class="form-control" id="email"  name="user[email]" placeholder="邮箱地址">
+		  </div>
+		  <div class="form-group">
+			<label for="password">密码</label>
+			<input type="password" class="form-control" id="password" name="user[password]" placeholder="密码">
+		  </div>
+		  <div class="checkbox">
+			<label><input type="checkbox" checked="checked" name="settings[spider]" value="1"> 允许搜索引擎收录我的网站</label>
+		  </div>
+		</form>
+	  </div>
+	</div>
+	<div style="text-align:center;"><a href="###" onclick="document.getElementById('install').submit()" class="btn btn-success">立即安装</a></div>
+</div>
+</body>
+</html>

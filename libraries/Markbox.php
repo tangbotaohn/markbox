@@ -14,15 +14,24 @@ require 'Vender.php';
 class Markbox
 {
 	private $vender;
+	private $baseurl = '/';
 	public function __construct(){
 		$this->vender = new Vender();
 		session_start();
+		$basepath = trim(str_replace($_SERVER['DOCUMENT_ROOT'],'',dirname(dirname(__FILE__))),'/');
+		if(empty($basepath)){
+			$basepath = '';
+		}
+		$this->baseurl = "http://{$_SERVER['HTTP_HOST']}{$basepath}";
 	}
-
-	public function isInstalled(){
-		$settings = $this->vender->Config->get('settings');
-		$users = $this->vender->Config->get('users');
-		return !(empty($settings) || empty($users));
+	
+	public function installed(){
+		$settings = $this->vender->config->get('settings');
+		$users = $this->vender->config->get('users');
+		if(empty($settings) || empty($users)){
+			return false;
+		}
+		return true;
 	}
 
 	public function config($name){
@@ -38,7 +47,7 @@ class Markbox
 		$users = $this->config('users');
 		$user = array();
 		foreach ($users as $k => $value) {
-			if($value['usrename'] == $username){
+			if($value['username'] == $username){
 				$user = $value;
 				break;
 			}
@@ -51,7 +60,8 @@ class Markbox
 		if($password != $user['password']){
 			throw new Exception("用户名或密码错误");
 		}
-
+		
+		unset($user['password']);
 		return $_SESSION['login'] = $user;
 	}
 
@@ -61,7 +71,7 @@ class Markbox
 
 	public function checkLogin(){
 		if(empty($_SESSION['login']) || empty($_SESSION['login']['username'])){
-			header("Location:index.php?m=admin&c=login");
+			header("Location:{$this->baseurl}/admin/login.php");
 			exit;
 		}
 	}
@@ -97,36 +107,16 @@ class Markbox
 		return true;
 	}
 	
-	public function getList($show,$order='desc'){
-		$page = $this->vender->page;
-		$md = $this->vender->folder->get('*.md');
-		$md->orderByTime($order);
-		$list = $md->getList();
-		$total = count($list);
-		$page->setPage($total,$show);
-		$limit = $page->getLimit();
-		$list = array_slice($list,$limit[0],$limit[1]);
-		$md = new Markbox\FileListSort($list);
-		$sorttime = $md->getSorttime();
-		$title = $md->getTitle();
-		$data = array();
-		$base = $this->vender->folder->getCurrent();
-		foreach($list as $k=>$v){
-			$data[$k]['file'] = str_replace($base,'',$v);
-			$data[$k]['time'] = $sorttime[$k];
-			$data[$k]['title'] = $title[$k];
+	public function getFiles($dir=''){
+		if(!empty($dir)){
+			$this->folderDown($dir);
 		}
-		return array('list'=>$data,'prev'=>$page->getPrev(),'next'=>$page->getNext(),'current'=>$page->getShow(),'back'=>$page->getBack(),'going'=>$page->getGoing());
-	}
-	
-	public function getAll($order='desc'){
 		$md = $this->vender->folder->get('*.md');
-		$md->orderByTime($order);
 		$list = $md->getList();
-		$title = $md->getTitle();
 		$sorttime = $md->getSorttime();
+		$title = $md->getTitle();
 		$data = array();
-		$base = $this->vender->folder->getCurrent();
+		$base = $this->vender->folder->getPath();
 		foreach($list as $k=>$v){
 			$data[$k]['file'] = str_replace($base,'',$v);
 			$data[$k]['time'] = $sorttime[$k];
@@ -135,4 +125,27 @@ class Markbox
 		return $data;
 	}
 	
+	public function getFolds($dir=''){
+		if(!empty($dir)){
+			$this->folderDown($dir);
+		}
+		$md = $this->vender->folder->get('*','dir');
+		$list = $md->getList();
+		$sorttime = $md->getSorttime();
+		$data = array();
+		foreach($list as $k=>$v){
+			$data[$k]['title'] = basename($v);
+			$data[$k]['file'] = $v;
+			$data[$k]['time'] = $sorttime[$k];
+		}
+		return $data;
+	}
+	
+	public function getContent($file){
+		$path = $this->vender->folder->getPath();
+		$content = file_get_contents($path.$file);
+		return $this->vender->parsedown->text($content);
+	}
+	
+
 }

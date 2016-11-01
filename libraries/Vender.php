@@ -27,13 +27,13 @@ class Vender
 	
 	private function makeConfig(){
 		require 'vender/Config.php';
-		return new Markbox\Config(dirname(dirname(__FILE__)).'/markbox/configs/');
+		return new Markbox\Config(dirname(dirname(__FILE__)).'/storages/configs/');
 	}
 	
 	private function makeFolder(){
 		require 'vender/Folder.php';
 		$folder = new Markbox\Folder();
-		$folder->setPath(dirname(dirname(__FILE__)).'/markbox/mdfiles/');
+		$folder->setPath(dirname(dirname(__FILE__)).'/storages/mdfiles/');
 		return $folder;
 	}
 	
@@ -54,7 +54,7 @@ class Vender
 	
 	private function makeStorages(){
 		require 'vender/Storages.php';
-		return new Markbox\Storages(array('path'=>dirname(dirname(__FILE__)).'/markbox/caches/','expire'=>3600));
+		return new Markbox\Storages(array('path'=>dirname(dirname(__FILE__)).'/storages/caches/','expire'=>3600));
 	}
 	
 }
