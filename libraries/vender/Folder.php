@@ -162,7 +162,7 @@ class Folder
 	}
 
     //递归获取目录
-    private function scanAllDirs(array $directories, string $path)
+    private function scanAllDirs(array $directories, $path)
     {
         $path = realpath($path);
         $path = trim($path, '/');
@@ -182,7 +182,7 @@ class Folder
     }
 
     //递归获取文件
-    private function scanAllFiles(array $allfiles, string $path, string $type)
+    private function scanAllFiles(array $allfiles, $path, $type)
     {
         $path = realpath($path);
         $path = trim($path, '/');

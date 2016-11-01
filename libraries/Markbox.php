@@ -101,7 +101,9 @@ class Markbox
 	public function mdfolds(){
 		$base = $this->vender->mdfiles->getPath();
 		$md = $this->vender->mdfiles->get('*','dir');
+		$md->orderByTime();
 		$list = $md->getList();
+
 		$sorttime = $md->getSorttime();
 		$data = array();
 		foreach($list as $k=>$v){
@@ -146,6 +148,24 @@ class Markbox
 		$path = dirname($this->vender->mdfiles->getPath()).'/';
 		$content = file_get_contents($path.$type.'/'.$file);
 		return $this->vender->parsedown->text($content);
+	}
+
+	public function addfold($name){
+		return $this->vender->mdfiles->create($name);
+	}
+
+	public function delfold($name){
+		return $this->vender->mdfiles->remove($name);
+	}
+
+	public function clean($name){
+		return $this->vender->mdfiles->clean($name);
+	}
+
+	public function copy2publish($file,$to){
+		$path = $this->vender->mdfiles->getPath();
+		$body = file_get_contents($path.$file);
+		return $this->vender->publish->addFile($to,$body);
 	}
 
 }

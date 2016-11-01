@@ -53,11 +53,11 @@
 		<div class="col-md-2 left">
 			<div class="list-group list-noborder" id="markbox-menu">
 			  <div class="list-group-item clearfix list-first">
-				<span class="btn pull-left"><i class="glyphicon glyphicon-plus"></i> 新建</span>
+				<span class="btn pull-left" data-toggle="modal" data-target="#newFold"><i class="glyphicon glyphicon-plus"></i> 新建</span>
 				<span class="btn pull-right" id="write"><i class="glyphicon glyphicon-pencil"></i> 撰写</span>
 			  </div>
 			  <a href="#" class="list-group-item active" data-mod="mdfiles" data-val="" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
-			  <a href="#" class="list-group-item" data-mod="mdfolds" data-val="" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
+			  <a href="#" class="list-group-item" id="myFolds" data-mod="mdfolds" data-val="" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
 			  <a href="#" class="list-group-item" data-mod="publish" data-val="" title="已发布的"><i class="glyphicon glyphicon-folder-open"></i>　已发布的</a>
 			  <a href="#" class="list-group-item" data-mod="recycles" data-val="recycle" title="回收站"><i class="glyphicon glyphicon-trash"></i>　回收站</a>
 			</div>
@@ -101,6 +101,25 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+
+<div class="modal fade" id="newFold" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">新建文件夹</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" id="foldname" placeholder="请输入文件夹名称，推荐使用英文名称">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="newFoldBtn">创建</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->

@@ -15,12 +15,24 @@ if(empty($app->getLogin())){
 
 if(!empty($_GET['mod'])){
 	$method = $_GET['mod'];
-	if($method == 'content'){
-		$result = $app->content($_GET['type'],$_GET['t']);
-	}else if(!empty($_GET['t'])){
-		$result = $app->{$method}($_GET['t']);
-	}else{
-		$result = $app->{$method}();
+	switch($method){
+		case 'content':
+			$result = $app->content($_GET['type'],$_GET['t']);
+			break;
+		case 'addfold':
+			$result = $app->addfold($_GET['t']);
+			break;
+		case 'addfile':
+			$result = $app->addfile($_GET['type'],$_GET['t']);
+			break;
+		default:
+			if(!empty($_GET['t'])){
+				$result = $app->{$method}($_GET['t']);
+			}else{
+				$result = $app->{$method}();
+			}
+			break;
+
 	}
 	response($result);
 }

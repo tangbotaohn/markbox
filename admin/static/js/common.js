@@ -133,6 +133,25 @@ var markbox = new function(){
 	});
 	
 	$('body').on('click','#maskviewClose',this.maskviewClose);
+
+	$('#newFoldBtn').click(function(){
+		var foldname = $('#foldname').val();
+		if(foldname != ''){
+			$.ajax({
+				url:"./ajax.php?mod=addfold&t="+foldname,
+				method:"GET",
+				dataType:"JSON",
+				success:function(rsp){
+					if(rsp.code == 200){
+						$('#newFold').modal('hide');
+						$('#myFolds').click();
+					}
+				}
+			})
+		}else{
+			alert('文件夹名称不能为空');
+		}
+	});
 	
 	var testEditor = null;
 	$('#write').click(function(){

@@ -10,7 +10,7 @@ if(!empty($_POST)){
 		if($app->login($_POST['username'],$_POST['password'])){
 			header("Location:./");
 		}
-	}catch($e Exception){
+	}catch(Exception $e){
 		exit($e->getMessage());
 	}
 }
