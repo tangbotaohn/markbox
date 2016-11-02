@@ -16,7 +16,7 @@
 </style>
 </head>
 
-<body>
+<body id="app" v-cloak>
 <div class="navbar navbar-inverse" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -53,33 +53,42 @@
 		<div class="col-md-2 left">
 			<div class="list-group list-noborder" id="markbox-menu">
 			  <div class="list-group-item clearfix list-first">
-				<span class="btn pull-left" data-toggle="modal" data-target="#newFold"><i class="glyphicon glyphicon-plus"></i> 新建</span>
-				<span class="btn pull-right" id="write"><i class="glyphicon glyphicon-pencil"></i> 撰写</span>
+				<span class="btn pull-left" v-on:click="dialog('backup')"><i class="glyphicon glyphicon-download-alt"></i> 备份</span>
+				<span class="btn pull-right" id="write" v-on:click="dialog('write')"><i class="glyphicon glyphicon-pencil"></i> 撰写</span>
 			  </div>
-			  <a href="#" class="list-group-item active" data-mod="mdfiles" data-val="" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
-			  <a href="#" class="list-group-item" id="myFolds" data-mod="mdfolds" data-val="" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
-			  <a href="#" class="list-group-item" data-mod="publish" data-val="" title="已发布的"><i class="glyphicon glyphicon-folder-open"></i>　已发布的</a>
-			  <a href="#" class="list-group-item" data-mod="recycles" data-val="recycle" title="回收站"><i class="glyphicon glyphicon-trash"></i>　回收站</a>
+			  <div id="firstMenu">
+				  <a href="javascript:;" class="list-group-item active" v-on:click="clickMenu" c-mod="mdfiles" c-val="" id="allMdfiles" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-mod="mdfolds" c-val="mdfiles" id="myFolds" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-mod="mdfiles" c-val="publish" title="已发布的"><i class="glyphicon glyphicon-folder-open"></i>　已发布的</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-mod="mdfiles" c-val="recycles" title="回收站"><i class="glyphicon glyphicon-trash"></i>　回收站</a>
+		      </div>
 			</div>
-			
 		</div>
 		<div class="col-md-3 center">
 			<div class="list-group list-noborder" id="markbox-list">
 			  <div class="list-group-item clearfix list-first">
 				  <h5 class="pull-left" id="current">最新文档</h5>
-				  <div class="btn-group pull-right">
-					<span class="btn dropdown-toggle" data-toggle="dropdown">排序 <i class="caret"></i></span>
-					<ul class="dropdown-menu" role="menu">
-					  <li><a href="#">文件名</a></li>
-					  <li><a href="#">编辑时间</a></li>
-					</ul>
+				  <div class="pull-right" v-if="cmod == 'mdfiles'">
+					  <span class="btn" v-on:click="dialog('newfold')"><i class="glyphicon glyphicon-plus"></i> 新建</span>
+				  </div>
+				  <div class="pull-right" v-if="cmod == 'content'">
+					  <div class="btn-group">
+						<span class="btn dropdown-toggle" data-toggle="dropdown">选项 <i class="caret"></i></span>
+						<ul class="dropdown-menu" role="menu">
+						  <li v-on:click="dialog('write')" v-data><a href="#">添加新文章</a></li>
+						  <li class="divider"></li>
+						  <li><a href="#">编辑时间排序</a></li>
+						  <li><a href="#">文件名排序</a></li>
+						</ul>
+					  </div>
 				  </div>
 				</div>
-				<div id="list">
-				    <a href="#" class="list-group-item active"><i class="glyphicon glyphicon-file"></i> 无标题文档</a>
-				    <a href="#" class="list-group-item"><i class="glyphicon glyphicon-file"></i> 文档标题</a>
-				    <a href="#" class="list-group-item"><i class="glyphicon glyphicon-file"></i> 文档标题</a>
-				    <a href="#" class="list-group-item"><i class="glyphicon glyphicon-file"></i> 文档标题</a>
+				<div id="midList">
+					<a href="#" class="list-group-item" v-for="item in mdlist" v-on:click="clickMenu" c-mod="{{cmod}}" c-val="{{item.file}}">
+						<i class="glyphicon glyphicon-file" v-if="cmod == 'content'"></i>
+						<i class="glyphicon glyphicon-folder-close" v-if="cmod == 'mdfiles'"></i>
+						{{item.title}}
+					</a>
 			    </div>
 			</div>
 		</div>
@@ -93,37 +102,16 @@
 				<a href="#" class="btn"><i class="glyphicon glyphicon-trash"></i> 删除</a>
 			  </div>
 			  <div class="container" id="content">
-			    <h3>无标题文档</h3>
-				contentsss<br>
-				contentsss<br>
-				contentsss<br>
+			    {{{content}}}
 			  </div>
 			</div>
 		</div>
 	</div>
 </div>
 
-
-<div class="modal fade" id="newFold" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">新建文件夹</h4>
-      </div>
-      <div class="modal-body">
-        <input type="text" class="form-control" id="foldname" placeholder="请输入文件夹名称，推荐使用英文名称">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" id="newFoldBtn">创建</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="static/editor/editormd.js"></script>

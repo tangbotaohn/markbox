@@ -15,6 +15,7 @@ class Markbox
 {
 	private $vender;
 	private $baseurl = '/';
+	private $storagedir = '/';
 	public function __construct(){
 		$this->vender = new Vender();
 		session_start();
@@ -23,6 +24,8 @@ class Markbox
 			$basepath = '';
 		}
 		$this->baseurl = "http://{$_SERVER['HTTP_HOST']}{$basepath}";
+		$this->storagedir = dirname(dirname(__FILE__)).'/storages/';
+		$this->vender->folder->setPath($this->storagedir);
 	}
 	
 	public function installed(){
@@ -77,89 +80,74 @@ class Markbox
 	}
 	
 	public function mdfiles($dir=''){
-		$base = $this->vender->mdfiles->getPath();
+		$dir = trim($dir,'/');
 		if(empty($dir)){
-			$md = $this->vender->mdfiles->scan('*.md');
+			$this->vender->folder->down('mdfiles');
+			$md = $this->vender->folder->scan('*.md');
 		}else{
-			$path = $this->vender->mdfiles->getPath();
-			$next = $path.trim($dir,'/');
-			$this->vender->mdfiles->setPath($next);
-			$md = $this->vender->mdfiles->get('*.md');
+			$this->vender->folder->down($dir);
+			$md = $this->vender->folder->get('*.md');
 		}
+		$md->orderByTime();
 		$list = $md->getList();
 		$sorttime = $md->getSorttime();
 		$title = $md->getTitle();
 		$data = array();
 		foreach($list as $k=>$v){
-			$data[$k]['file'] = str_replace($base,'',$v);
+			$data[$k]['file'] = str_replace($this->storagedir,'',$v);
 			$data[$k]['time'] = $sorttime[$k];
 			$data[$k]['title'] = $title[$k];
 		}
 		return $data;
 	}
 	
-	public function mdfolds(){
-		$base = $this->vender->mdfiles->getPath();
-		$md = $this->vender->mdfiles->get('*','dir');
+	public function mdfolds($dir=''){
+		$dir = trim($dir,'/');
+		if(empty($dir)){
+			$dir = 'mdfiles';
+		}
+		$this->vender->folder->down($dir);
+		$md = $this->vender->folder->get('*','dir');
 		$md->orderByTime();
 		$list = $md->getList();
 
 		$sorttime = $md->getSorttime();
 		$data = array();
+		$base = $this->vender->folder->getPath();
 		foreach($list as $k=>$v){
-			$data[$k]['file']  = trim(str_replace($base,'',$v),'/');
+			$data[$k]['file']  = str_replace($this->storagedir,'',$v);
 			$data[$k]['time']  = $sorttime[$k];
-			$data[$k]['title'] = $data[$k]['file'];
-		}
-		return $data;
-	}
-
-	public function publish(){
-		$base = $this->vender->publish->getPath();
-		$md = $this->vender->publish->get('*.md');
-		$list = $md->getList();
-		$sorttime = $md->getSorttime();
-		$title = $md->getTitle();
-		$data = array();
-		foreach($list as $k=>$v){
-			$data[$k]['file'] = str_replace($base,'',$v);
-			$data[$k]['time'] = $sorttime[$k];
-			$data[$k]['title'] = $title[$k];
+			$data[$k]['title'] = trim(str_replace($base,'',$v),'/');
 		}
 		return $data;
 	}
 	
-	public function recycles(){
-		$base = $this->vender->recycles->getPath();
-		$md = $this->vender->recycles->get('*.md');
-		$list = $md->getList();
-		$sorttime = $md->getSorttime();
-		$title = $md->getTitle();
-		$data = array();
-		foreach($list as $k=>$v){
-			$data[$k]['file'] = str_replace($base,'',$v);
-			$data[$k]['time'] = $sorttime[$k];
-			$data[$k]['title'] = $title[$k];
+	public function content($file){
+		$path = $this->storagedir.$file;
+		if(!file_exists($path)){
+			throw new Exception("file not found",101);
 		}
-		return $data;
-	}
-	
-	public function content($type,$file){
-		$path = dirname($this->vender->mdfiles->getPath()).'/';
-		$content = file_get_contents($path.$type.'/'.$file);
+		$content = file_get_contents($path);
 		return $this->vender->parsedown->text($content);
 	}
 
+	public function addfile($name,$body){
+		return $this->vender->folder->addFile($name,$body);
+	}
+
 	public function addfold($name){
-		return $this->vender->mdfiles->create($name);
+		$last = $this->downfolder($name);
+		return $this->vender->folder->create($last);
 	}
 
 	public function delfold($name){
-		return $this->vender->mdfiles->remove($name);
+		$last = $this->downfolder($name);
+		return $this->vender->mdfiles->remove($last);
 	}
 
 	public function clean($name){
-		return $this->vender->mdfiles->clean($name);
+		$last = $this->downfolder($name);
+		return $this->vender->mdfiles->clean($last);
 	}
 
 	public function copy2publish($file,$to){
@@ -167,5 +155,17 @@ class Markbox
 		$body = file_get_contents($path.$file);
 		return $this->vender->publish->addFile($to,$body);
 	}
-
+	
+	private function downfolder($name){
+		$name = trim($name,'/');
+		$path = (array)explode('/',$name);
+		$len = count($path)-1;
+		$createname = $path[$len];
+		unset($path[$len]);
+		foreach($path as $v){
+			$this->vender->folder->down($v);
+		}
+		
+		return $createname;
+	}
 }

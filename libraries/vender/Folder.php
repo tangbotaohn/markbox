@@ -42,6 +42,16 @@ class Folder
     {
         return $this->CURRENT;
     }
+	
+	public function up(){
+		$path = dirname($this->CURRENT);
+		$this->setPath($path);
+	}
+	
+	public function down($name){
+		$path = $this->CURRENT.$name;
+		$this->setPath($path);
+	}
 
     //在当前对象路径下创建目录
     public function create($name, $chmod=0777)
