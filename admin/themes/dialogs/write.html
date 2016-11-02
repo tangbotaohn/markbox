@@ -2,12 +2,13 @@
 	<div class="tools">
 		<div class="container write clearfix">
 			<div class="pull-left">
-				<span class="btn btn-xs"><i class="glyphicon glyphicon-transfer"></i> 协作</span>
-				<span class="btn btn-xs" onclick="save()"><i class="glyphicon glyphicon-hdd"></i> 保存</span>
-				<span class="btn btn-xs"><i class="glyphicon glyphicon-share-alt"></i> 发布</span>
+				文件名：<code id="rename"><span id="path"></span>/<span id="filename" title="点击修改" contenteditable="true"></span>.md</code>
+				<span id="info"></span>
 			</div>
 			<div class="pull-right">
-				<span class="btn btn-xs" id="maskviewClose" onclick="quitWrite()"><i class="glyphicon glyphicon-remove"></i> 取消</span>
+				<span class="btn btn-xs" id="save"><i class="glyphicon glyphicon-hdd"></i> 保存</span>
+				<span class="btn btn-xs" id="publish"><i class="glyphicon glyphicon-share-alt"></i> 发布</span>
+				<span class="btn btn-xs" id="close"><i class="glyphicon glyphicon-remove"></i> 关闭</span>
 			</div>
 		</div>
 	</div>
@@ -15,13 +16,6 @@
 		<div id="test-editormd"><textarea style="display:none;" name="content"></textarea></div>
 	</div>
 	<script>
-	function quitWrite(){
-		$('#MarkDialog').slideUp('fast',function(){
-			document.getElementById('allMdfiles').click();
-			closeDialog()
-		});
-	}
-	
 	$('#MarkDialog').slideDown();
 	var testEditor = null;
 	testEditor = editormd("test-editormd", {
@@ -37,19 +31,75 @@
 		flowChart:true,
 		watch:false
 	});
-	var name = Date.parse(new Date());
+
+	
+
+	$('#save').click(save);
+	setInterval(save,10000)
+
+	$('#close').click(function(){
+		$('#MarkDialog').slideUp('fast',function(){
+			document.getElementById('allMdfiles').click();
+			closeDialog()
+		});
+	});
+
+	var presavedata = '';
 	function save(){
 		var data = testEditor.getMarkdown();
+		if(data == '' || data == presavedata) return;
+		var file = getFilename();
 		$.ajax({
-			url:"./ajax.php?mod=addfile&t=mdfiles/"+name+".md",
+			url:"./ajax.php?mod=addfile&t="+file.path+"/"+file.filename+".md",
 			method:"POST",
 			data:{data:data},
 			dataType:"JSON",
 			success:function(rsp){
+				presavedata = data;
+				var date = new Date();
+				$('#info').html('已保存于'+date.getHours()+"点"+date.getMinutes()+"分"+date.getSeconds()+'秒');
 				console.log(rsp);
 			}
 		});
 	}
+
+	$('#filename').click(function(){
+		$('#filename').css('background','#FFF');
+		$('#filename').one('blur',function(){
+			$('#filename').css('background','none');
+		});
+	});
+
+	getFilename();
+	function getFilename(){
+		var filename = $('#filename').html();
+		var path = $('#path').html();
+		if(filename && path){
+			return {path:path,filename:filename};
+		}
+		var path = $('#MarkDialog').attr('data-path')? $('#MarkDialog').attr('data-path') : 'mdfiles';
+		if(path.indexOf('.md') >= 0){
+
+			$.ajax({
+				url:"./ajax.php?mod=mdcontent&t="+path,
+				method:"GET",
+				dataType:"JSON",
+				success:function(rsp){
+					$('#test-editormd textarea:first').val(rsp.data);
+				}
+			});
+
+			var arr = path.split('/');
+			filename = arr[arr.length-1].replace('.md','');
+			path = arr.slice(0,arr.length-1).join('/');
+		}else{
+			filename = Date.parse(new Date());
+			console.log(filename);
+		}
+		$('#filename').html(filename);
+		$('#path').html(path);
+	}
+	
 	</script>
 </div>
 

@@ -75,7 +75,7 @@
 					  <div class="btn-group">
 						<span class="btn dropdown-toggle" data-toggle="dropdown">选项 <i class="caret"></i></span>
 						<ul class="dropdown-menu" role="menu">
-						  <li v-on:click="dialog('write')" v-data><a href="#">添加新文章</a></li>
+						  <li v-on:click="dialog('write')"><a href="#">添加新文章</a></li>
 						  <li class="divider"></li>
 						  <li><a href="#">编辑时间排序</a></li>
 						  <li><a href="#">文件名排序</a></li>
@@ -95,11 +95,11 @@
 		<div class="col-md-7 right">
 			<div class="list-group list-noborder">
 			  <div class="list-group-item list-first">
-				<a href="#" class="btn"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
-				<a href="#" class="btn"><i class="glyphicon glyphicon-share-alt"></i> 分享</a>
+				<a href="#" class="btn" v-on:click="dialog('write')"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+<!-- 				<a href="#" class="btn"><i class="glyphicon glyphicon-share-alt"></i> 分享</a>
 				<a href="#" class="btn"><i class="glyphicon glyphicon-transfer"></i> 协作</a>
-				<a href="#" class="btn"><i class="glyphicon glyphicon-lock"></i> 密码</a>
-				<a href="#" class="btn"><i class="glyphicon glyphicon-trash"></i> 删除</a>
+				<a href="#" class="btn"><i class="glyphicon glyphicon-lock"></i> 密码</a> -->
+				<a href="#" class="btn" v-on:click="delFile()"><i class="glyphicon glyphicon-trash"></i> 删除</a>
 			  </div>
 			  <div class="container" id="content">
 			    {{{content}}}

@@ -81,6 +81,7 @@ class Markbox
 	
 	public function mdfiles($dir=''){
 		$dir = trim($dir,'/');
+		if($dir == 'mdfiles') $dir = '';
 		if(empty($dir)){
 			$this->vender->folder->down('mdfiles');
 			$md = $this->vender->folder->scan('*.md');
@@ -115,7 +116,7 @@ class Markbox
 		$data = array();
 		$base = $this->vender->folder->getPath();
 		foreach($list as $k=>$v){
-			$data[$k]['file']  = str_replace($this->storagedir,'',$v);
+			$data[$k]['file']  = trim(str_replace($this->storagedir,'',$v),'/');
 			$data[$k]['time']  = $sorttime[$k];
 			$data[$k]['title'] = trim(str_replace($base,'',$v),'/');
 		}
@@ -131,8 +132,20 @@ class Markbox
 		return $this->vender->parsedown->text($content);
 	}
 
+	public function mdcontent($file){
+		$path = $this->storagedir.$file;
+		if(!file_exists($path)){
+			throw new Exception("file not found",101);
+		}
+		return file_get_contents($path);
+	}
+
 	public function addfile($name,$body){
 		return $this->vender->folder->addFile($name,$body);
+	}
+
+	public function delfile($name){
+		return $this->vender->folder->delFile($name);
 	}
 
 	public function addfold($name){
@@ -142,18 +155,26 @@ class Markbox
 
 	public function delfold($name){
 		$last = $this->downfolder($name);
-		return $this->vender->mdfiles->remove($last);
+		return $this->vender->folder->remove($last);
 	}
 
 	public function clean($name){
 		$last = $this->downfolder($name);
-		return $this->vender->mdfiles->clean($last);
+		return $this->vender->folder->clean($last);
 	}
 
-	public function copy2publish($file,$to){
-		$path = $this->vender->mdfiles->getPath();
-		$body = file_get_contents($path.$file);
-		return $this->vender->publish->addFile($to,$body);
+	public function move($oldname,$newname){
+		return $this->vender->folder->rename($oldname,$newname);
+	}
+
+	public function copy($oldname,$newname){
+		$path = $this->vender->folder->getPath();
+		$file = $path.$oldname;
+		if(!file_exists($file)){
+			throw new Exception("file not found",101);
+		}
+		$body = file_get_contents($file);
+		return $this->vender->publish->addFile($newname,$body);
 	}
 	
 	private function downfolder($name){

@@ -4,7 +4,7 @@ var vue = new Vue({
 	data:{
 		mdlist:[],
 		content:"",
-		queryParam:"",
+		queryParam:"mdfiles",
 		cmod:"content",
 		readdir:"mdfiles",
 	},
@@ -17,7 +17,7 @@ var vue = new Vue({
 			var mod = $(evt.target).attr('c-mod');
 			this.queryParam = $(evt.target).attr('c-val')? $(evt.target).attr('c-val') : '';
 			$('#current').html($(evt.target).attr('title'));
-			console.log(mod,this.queryParam,$(evt.target).attr('title'))
+			console.log(mod,this.queryParam,this.readdir)
 			$(evt.target).parent().find('.active').removeClass('active');
 			$(evt.target).addClass('active');
 			switch(mod){
@@ -101,13 +101,25 @@ var vue = new Vue({
 				}
 			});
 		},
-		
+		delFile:function(){
+			$.ajax({
+				url:'./ajax.php?mod=delfile&t='+that.queryParam,
+				method:"GET",
+				dataType:'JSON',
+				success:function(rsp){
+					that.content = '';
+					document.querySelector('#firstMenu').querySelector('.active').click();
+				}
+			});
+		},
 		dialog:function(name){
 			$.ajax({
 				url:'./themes/dialogs/'+name+'.html',
 				method:"GET",
 				success:function(html){
-					$('body').append(html);
+					var ele = $(html);
+					ele.attr('data-path',that.queryParam);
+					$('body').append(ele);
 				}
 			})
 		}
