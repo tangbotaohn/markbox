@@ -81,14 +81,16 @@ class Markbox
 	
 	public function mdfiles($dir=''){
 		$dir = trim($dir,'/');
-		if($dir == 'mdfiles') $dir = '';
-		if(empty($dir)){
-			$this->vender->folder->down('mdfiles');
+		if(empty($dir)) return array();
+		if($dir == 'mdfiles' || $dir == 'publish'){
+			$this->vender->folder->down($dir);
 			$md = $this->vender->folder->scan('*.md');
 		}else{
 			$this->vender->folder->down($dir);
 			$md = $this->vender->folder->get('*.md');
 		}
+		$fold = (array)explode('/',$dir);
+		$fold = $fold[0];
 		$md->orderByTime();
 		$list = $md->getList();
 		$sorttime = $md->getSorttime();
@@ -96,7 +98,8 @@ class Markbox
 		$data = array();
 		foreach($list as $k=>$v){
 			$data[$k]['file'] = str_replace($this->storagedir,'',$v);
-			$data[$k]['time'] = $sorttime[$k];
+			$data[$k]['filename'] = trim(str_replace($fold,'',$data[$k]['file']),'/');
+			$data[$k]['time'] = $this->formattime($sorttime[$k]);
 			$data[$k]['title'] = $title[$k];
 		}
 		return $data;
@@ -189,4 +192,28 @@ class Markbox
 		
 		return $createname;
 	}
+
+	private function formattime($time){
+		$last = time() - $time;
+		if($last < 60){
+			return '刚刚';
+		}
+		$last = intval($last / 60);
+		if($last < 60){
+			return $last.'分钟前';
+		}
+		$last = intval($last / 60);
+		if($last < 60){
+			return $last.'小时前';
+		}
+		$last = intval($last / 60);
+		if($last < 30){
+			return $last.'天前';
+		}
+		if($last < 60){
+			return date('M-d H:i',$time);
+		}
+		return date('Y-M-d',$time);
+	}
+
 }

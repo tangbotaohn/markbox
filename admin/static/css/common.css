@@ -24,3 +24,17 @@ html,body{height:100%;overflow:hidden;}
 /*scroll*/
 #midList,#content{height:calc(100% - 56px);overflow-y:auto;}
 .list-group{height:100%;}
+
+/*mid menu*/
+#midList .list-group-item .info{font-size:12px;color:#CCC;margin-top:10px;}
+#midList .list-group-item.active .info{color:#F1F1F1;}
+
+#midList .list-group-item .listbtn{display:none;font-size:12px;position:absolute;right:10px;top:10px;color:#666;}
+#midList .list-group-item .listbtn span{margin-left:5px;}
+#midList .list-group-item .listbtn span:hover{color:#333;}
+
+#midList .list-group-item.active:hover{background:#97b9ff;border-top:solid 1px #97b9ff;border-bottom:solid 1px #97b9ff;}
+
+
+#midList .list-group-item.active:hover .listbtn{display: block;}
+#midList .list-group-item:hover .listbtn{display: block;}

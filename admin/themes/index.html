@@ -57,7 +57,7 @@
 				<span class="btn pull-right" id="write" v-on:click="dialog('write')"><i class="glyphicon glyphicon-pencil"></i> 撰写</span>
 			  </div>
 			  <div id="firstMenu">
-				  <a href="javascript:;" class="list-group-item active" v-on:click="clickMenu" c-cmd="mdfiles" c-val="" id="allMdfiles" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
+				  <a href="javascript:;" class="list-group-item active" v-on:click="clickMenu" c-cmd="mdfiles" c-val="mdfiles" id="allMdfiles" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
 				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfolds" c-val="mdfiles" id="myFolds" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
 				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfiles" c-val="publish" title="最新发布"><i class="glyphicon glyphicon-file"></i>　最新发布</a>
 				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfolds" c-val="publish" title="发布分类"><i class="glyphicon glyphicon-folder-open"></i>　发布分类</a>
@@ -70,30 +70,67 @@
 			  <div class="list-group-item clearfix list-first">
 				  <h5 class="pull-left" id="current">最新文档</h5>
 				  
-				  <!--file menu-->
-				  <div class="pull-right" v-if="cmd == 'mdfiles'">
-					  <span class="btn" v-on:click="dialog('newfold')"><i class="glyphicon glyphicon-plus"></i> 新建</span>
-				  </div>
-				  
-				  <!--file menu-->
-				  <div class="pull-right" v-if="cmd == 'content'">
+
+				  <!--最新文档-->
+				  <div class="pull-right" v-if="midtype == 'myfiles'">
 					  <div class="btn-group">
 						<span class="btn dropdown-toggle" data-toggle="dropdown">选项 <i class="caret"></i></span>
 						<ul class="dropdown-menu" role="menu">
 						  <li v-on:click="dialog('write')"><a href="#">添加新文章</a></li>
-						  <li v-on:click="dialog('newfold')"><a href="#">添加文件夹</a></li>
 						  <li class="divider"></li>
 						  <li><a href="#">编辑时间排序</a></li>
 						  <li><a href="#">文件名排序</a></li>
 						</ul>
 					  </div>
 				  </div>
+
+				  <!--我的文件夹-->
+				  <div class="pull-right" v-if="midtype == 'myfolds'">
+					  <span class="btn" v-on:click="dialog('newfold')"><i class="glyphicon glyphicon-plus"></i> 新建</span>
+				  </div>
+
+				  <!--最新发布-->
+				  <div class="pull-right" v-if="midtype == 'publishfiles'">
+					  <div class="btn-group">
+						<span class="btn dropdown-toggle" data-toggle="dropdown">选项 <i class="caret"></i></span>
+						<ul class="dropdown-menu" role="menu">
+						  <li><a href="#">编辑时间排序</a></li>
+						  <li><a href="#">文件名排序</a></li>
+						</ul>
+					  </div>
+				  </div>
+
+				  <!--发布分类-->
+				  <div class="pull-right" v-if="midtype == 'publishfolds'">
+					  <span class="btn" v-on:click="dialog('newfold')"><i class="glyphicon glyphicon-plus"></i> 新建</span>
+				  </div>
+
+				  <!--回收站-->
+				  <div class="pull-right" v-if="midtype == 'recyclefiles'">
+					  <div class="btn-group">
+						<span class="btn dropdown-toggle" data-toggle="dropdown">选项 <i class="caret"></i></span>
+						<ul class="dropdown-menu" role="menu">
+						  <li v-on:click="dialog('clean')"><a href="#">清空回收站</a></li>
+						  <li class="divider"></li>
+						  <li><a href="#">编辑时间排序</a></li>
+						  <li><a href="#">文件名排序</a></li>
+						</ul>
+					  </div>
+				  </div>
+				  
+				  
 				</div>
 				<div id="midList">
 					<a href="#" class="list-group-item" v-for="item in mdlist" v-on:click="clickMenu" c-cmd="{{cmd}}" c-val="{{item.file}}">
-						<i class="glyphicon glyphicon-file" v-if="cmd == 'content'"></i>
-						<i class="glyphicon glyphicon-folder-close" v-if="cmd == 'mdfiles'"></i>
 						{{item.title}}
+						<div class="info clearfix">
+							<span><i class="glyphicon glyphicon-folder-close"></i> {{item.filename}}</span>
+							<span class="pull-right"><i class="glyphicon glyphicon-time"></i> {{item.time}}</span>
+						</div>
+						<div class="listbtn">
+							<span class="glyphicon glyphicon-trash"></span>
+							<span class="glyphicon glyphicon-log-in" v-if="cmd == 'content'"></span>
+						</div>
 					</a>
 					<div class="loading" v-if="midloading"></div>
 			    </div>
@@ -116,7 +153,7 @@
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://cdn.jsdelivr.net/vue/1.0.26/vue.min.js"></script>
+<script src="http://cdn.bootcss.com/vue/1.0.28/vue.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="static/editor/editormd.js"></script>

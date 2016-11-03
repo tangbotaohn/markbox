@@ -12,7 +12,9 @@ if(!$app->installed()){
 if(empty($app->getLogin())){
 	response(array('msg'=>'未登录'),2);
 }
-
+if(!ini_get('date.timezone')){
+    date_default_timezone_set('Asia/Shanghai');
+}
 if(!empty($_GET['mod'])){
 	$method = $_GET['mod'];
 	if($method=='addfile'){
