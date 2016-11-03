@@ -2,7 +2,7 @@
 	<div class="tools">
 		<div class="container write clearfix">
 			<div class="pull-left">
-				文件名：<code id="rename"><span id="path"></span>/<span id="filename" title="点击修改" contenteditable="true"></span>.md</code>
+				文件名：<code id="rename"><span id="path"></span>/<span id="filename" title="点击可修改" contenteditable="true"></span>.md</code>
 				<span id="info"></span>
 			</div>
 			<div class="pull-right">
@@ -32,8 +32,6 @@
 		watch:false
 	});
 
-	
-
 	$('#save').click(save);
 	setInterval(save,10000)
 
@@ -58,7 +56,6 @@
 				presavedata = data;
 				var date = new Date();
 				$('#info').html('已保存于'+date.getHours()+"点"+date.getMinutes()+"分"+date.getSeconds()+'秒');
-				console.log(rsp);
 			}
 		});
 	}
@@ -77,9 +74,8 @@
 		if(filename && path){
 			return {path:path,filename:filename};
 		}
-		var path = $('#MarkDialog').attr('data-path')? $('#MarkDialog').attr('data-path') : 'mdfiles';
+		var path = vue.queryParam;
 		if(path.indexOf('.md') >= 0){
-
 			$.ajax({
 				url:"./ajax.php?mod=mdcontent&t="+path,
 				method:"GET",
@@ -88,13 +84,11 @@
 					$('#test-editormd textarea:first').val(rsp.data);
 				}
 			});
-
 			var arr = path.split('/');
 			filename = arr[arr.length-1].replace('.md','');
 			path = arr.slice(0,arr.length-1).join('/');
 		}else{
-			filename = Date.parse(new Date());
-			console.log(filename);
+			filename = 'autoname'+parseInt(Date.parse(new Date()) / 1000);
 		}
 		$('#filename').html(filename);
 		$('#path').html(path);

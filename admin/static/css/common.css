@@ -14,8 +14,13 @@ html,body{height:100%;overflow:hidden;}
 .center{border-right:solid 1px #e7e7e7;border-left:solid 1px #e7e7e7;}
 .list-noborder .list-group-item{border-radius:0;border-left:none;border-right:none;}
 .maskview{position:absolute;width:100%;height:100%;top:0;left:0;z-index:200;background:#F8F8F8;overflow-y:scroll;}
+.loading{width:100%;height:100%;background:rgba(255,255,255,0.9);position:absolute;top:0;}
 #current{font-size:16px;margin:5px 0;padding-top:5px;}
 
 /*write.html*/
-.tools{padding:10px 0;position:fixed;top:0;width:100%;background:#EEE;}
+.tools{padding:10px 0;position:fixed;top:0;width:100%;background:#EEE;z-index:201;}
 .write{width:960px;}
+
+/*scroll*/
+#midList,#content{height:calc(100% - 56px);overflow-y:auto;}
+.list-group{height:100%;}

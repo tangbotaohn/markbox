@@ -23,11 +23,11 @@
 		var foldname = $('#foldname').val();
 		if(foldname != ''){
 			$.ajax({
-				url:"./ajax.php?mod=addfold&t=mdfiles/"+foldname,
+				url:"./ajax.php?mod=addfold&t="+vue.queryParam+"/"+foldname,
 				method:"GET",
 				dataType:"JSON",
 				success:function(rsp){
-					document.getElementById('myFolds').click();
+					document.querySelector('#firstMenu').querySelector('.active').click();
 					if(rsp.code == 200){
 						$('#MarkDialog').modal('hide');
 					}

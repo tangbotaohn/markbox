@@ -57,10 +57,11 @@
 				<span class="btn pull-right" id="write" v-on:click="dialog('write')"><i class="glyphicon glyphicon-pencil"></i> 撰写</span>
 			  </div>
 			  <div id="firstMenu">
-				  <a href="javascript:;" class="list-group-item active" v-on:click="clickMenu" c-mod="mdfiles" c-val="" id="allMdfiles" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
-				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-mod="mdfolds" c-val="mdfiles" id="myFolds" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
-				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-mod="mdfiles" c-val="publish" title="已发布的"><i class="glyphicon glyphicon-folder-open"></i>　已发布的</a>
-				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-mod="mdfiles" c-val="recycles" title="回收站"><i class="glyphicon glyphicon-trash"></i>　回收站</a>
+				  <a href="javascript:;" class="list-group-item active" v-on:click="clickMenu" c-cmd="mdfiles" c-val="" id="allMdfiles" title="最新文档"><i class="glyphicon glyphicon-file"></i>　最新文档</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfolds" c-val="mdfiles" id="myFolds" title="我的文件夹"><i class="glyphicon glyphicon-folder-open"></i>　我的文件夹</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfiles" c-val="publish" title="最新发布"><i class="glyphicon glyphicon-file"></i>　最新发布</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfolds" c-val="publish" title="发布分类"><i class="glyphicon glyphicon-folder-open"></i>　发布分类</a>
+				  <a href="javascript:;" class="list-group-item" v-on:click="clickMenu" c-cmd="mdfiles" c-val="recycles" title="回收站"><i class="glyphicon glyphicon-trash"></i>　回收站</a>
 		      </div>
 			</div>
 		</div>
@@ -68,14 +69,19 @@
 			<div class="list-group list-noborder" id="markbox-list">
 			  <div class="list-group-item clearfix list-first">
 				  <h5 class="pull-left" id="current">最新文档</h5>
-				  <div class="pull-right" v-if="cmod == 'mdfiles'">
+				  
+				  <!--file menu-->
+				  <div class="pull-right" v-if="cmd == 'mdfiles'">
 					  <span class="btn" v-on:click="dialog('newfold')"><i class="glyphicon glyphicon-plus"></i> 新建</span>
 				  </div>
-				  <div class="pull-right" v-if="cmod == 'content'">
+				  
+				  <!--file menu-->
+				  <div class="pull-right" v-if="cmd == 'content'">
 					  <div class="btn-group">
 						<span class="btn dropdown-toggle" data-toggle="dropdown">选项 <i class="caret"></i></span>
 						<ul class="dropdown-menu" role="menu">
 						  <li v-on:click="dialog('write')"><a href="#">添加新文章</a></li>
+						  <li v-on:click="dialog('newfold')"><a href="#">添加文件夹</a></li>
 						  <li class="divider"></li>
 						  <li><a href="#">编辑时间排序</a></li>
 						  <li><a href="#">文件名排序</a></li>
@@ -84,11 +90,12 @@
 				  </div>
 				</div>
 				<div id="midList">
-					<a href="#" class="list-group-item" v-for="item in mdlist" v-on:click="clickMenu" c-mod="{{cmod}}" c-val="{{item.file}}">
-						<i class="glyphicon glyphicon-file" v-if="cmod == 'content'"></i>
-						<i class="glyphicon glyphicon-folder-close" v-if="cmod == 'mdfiles'"></i>
+					<a href="#" class="list-group-item" v-for="item in mdlist" v-on:click="clickMenu" c-cmd="{{cmd}}" c-val="{{item.file}}">
+						<i class="glyphicon glyphicon-file" v-if="cmd == 'content'"></i>
+						<i class="glyphicon glyphicon-folder-close" v-if="cmd == 'mdfiles'"></i>
 						{{item.title}}
 					</a>
+					<div class="loading" v-if="midloading"></div>
 			    </div>
 			</div>
 		</div>
@@ -96,13 +103,11 @@
 			<div class="list-group list-noborder">
 			  <div class="list-group-item list-first">
 				<a href="#" class="btn" v-on:click="dialog('write')"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
-<!-- 				<a href="#" class="btn"><i class="glyphicon glyphicon-share-alt"></i> 分享</a>
-				<a href="#" class="btn"><i class="glyphicon glyphicon-transfer"></i> 协作</a>
-				<a href="#" class="btn"><i class="glyphicon glyphicon-lock"></i> 密码</a> -->
 				<a href="#" class="btn" v-on:click="delFile()"><i class="glyphicon glyphicon-trash"></i> 删除</a>
 			  </div>
 			  <div class="container" id="content">
 			    {{{content}}}
+				<div class="loading" v-if="contentloading"></div>
 			  </div>
 			</div>
 		</div>
