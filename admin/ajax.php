@@ -6,27 +6,26 @@ function response($data, $code=200){
 
 $app = new Markbox();
 if(!$app->installed()){
-	response(array('msg'=>'未安装'),1);
+	response('未安装',1);
 }
 
 if(empty($app->getLogin())){
-	response(array('msg'=>'未登录'),2);
+	response('未登录',2);
 }
 if(!ini_get('date.timezone')){
     date_default_timezone_set('Asia/Shanghai');
 }
 if(!empty($_GET['mod'])){
-	$method = $_GET['mod'];
-	if($method=='addfile'){
-		$result = $app->addfile($_GET['t'],$_POST['data']);
-	}else if($method == 'move'){
-		$app->move($_GET['t'],$_POST['mv']);
-	}else if($method == 'copy'){
-		$app->copy($_GET['t'],$_POST['cp']);
-	}else if(!empty($_GET['t'])){
-		$result = $app->{$method}($_GET['t']);
-	}else{
-		$result = $app->{$method}();
+	try{
+		$method = $_GET['mod'];
+		$param = array_merge((array)$_GET,(array)$_POST);
+		$result = $app->{$method}($param);
+		response($result);
+	}catch(Exception $e){
+		response($e->getMessage(),$e->getCode());
+	}catch(FolderException $e){
+		response($e->getMessage(),$e->getCode());
+	}catch(FileListSortException $e){
+		response($e->getMessage(),$e->getCode());
 	}
-	response($result);
 }

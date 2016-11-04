@@ -128,8 +128,8 @@
 							<span class="pull-right"><i class="glyphicon glyphicon-time"></i> {{item.time}}</span>
 						</div>
 						<div class="listbtn">
-							<span class="glyphicon glyphicon-trash"></span>
-							<span class="glyphicon glyphicon-log-in" v-if="cmd == 'content'"></span>
+							<span class="glyphicon glyphicon-trash" v-if="cmd == 'mdfiles'" v-on:click="delFold" c-val="{{item.file}}"></span>
+							<span class="glyphicon glyphicon-log-in" v-if="cmd == 'content'" v-on:click="dialog('moveto')" c-val="{{item.file}}"></span>
 						</div>
 					</a>
 					<div class="loading" v-if="midloading"></div>
@@ -140,7 +140,7 @@
 			<div class="list-group list-noborder">
 			  <div class="list-group-item list-first">
 				<a href="#" class="btn" v-on:click="dialog('write')"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
-				<a href="#" class="btn" v-on:click="delFile()"><i class="glyphicon glyphicon-trash"></i> 删除</a>
+				<a href="#" class="btn" v-on:click="mvtorecycle"><i class="glyphicon glyphicon-trash"></i> 删除</a>
 			  </div>
 			  <div class="container" id="content">
 			    {{{content}}}

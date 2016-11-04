@@ -62,7 +62,7 @@ class Folder
         }
         $name = $this->CURRENT.$name.'/';
         if (is_dir($name)) {
-            return true;
+            throw new Exception("dir exists",101);
         }
 
         return @mkdir($name, $chmod);
@@ -79,9 +79,9 @@ class Folder
         if (empty($newname)) {
             throw new FolderException('newname is error');
         }
-        $oldname = $this->CURRENT.$oldname.'/';
-        $newname = $this->CURRENT.$newname.'/';
-        if (!is_dir($oldname)) {
+        $oldname = $this->CURRENT.$oldname;
+        $newname = $this->CURRENT.$newname;
+        if (!is_dir($oldname) && !file_exists($oldname)) {
             throw new FolderException('oldname not exists');
         }
 
@@ -91,7 +91,15 @@ class Folder
     //删除当前对象下的目录
     public function remove($name)
     {
-        return @rmdir($this->CURRENT.$name);
+		$path = $this->CURRENT.$name;
+		if(!is_dir($path)){
+			throw new \Exception("not found dir",101);
+		}
+		$empty = glob($path."/*");
+		if( ! empty($empty)){
+			throw new \Exception("dir not empty",102);
+		}
+        return rmdir($path);
     }
 
     //在当前对象目录下创建文件
@@ -269,7 +277,12 @@ class FileListSort
 			$content = $this->getContent();
 			foreach($content as $k=>$main){
 				preg_match("|\# .*|",$main, $content);
-				$this->title[$k] = str_replace('# ','',$content[0]);
+				if(empty($content[0])){
+					$title = array_shift(explode("\r\n",$content));
+				}else{
+					$title = $content[0];
+				}
+				$this->title[$k] = str_replace('# ','',$title);
 			}
 		}
 		

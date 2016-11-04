@@ -1,0 +1,32 @@
+body {
+    font-family:"lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    font-size: 16px;
+}
+
+.title a {
+    display: block;
+}
+
+.title {
+    cursor: pointer;
+}
+
+li.title:hover {
+    background-color: #eee;
+}
+
+.panel {
+    border-radius: 0;
+}
+
+.panel-default > .panel-heading {
+	background-image: none;
+	background-color: #fff;
+}
+
+.navbar-default {
+	background-image: none;
+	background-color: #fff;
+  box-shadow: none;
+}
+.page{text-align:center;margin-bottom:20px;}

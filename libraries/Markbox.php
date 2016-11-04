@@ -79,9 +79,9 @@ class Markbox
 		}
 	}
 	
-	public function mdfiles($dir=''){
-		$dir = trim($dir,'/');
-		if(empty($dir)) return array();
+	public function mdfiles($param){
+		$dir = empty($param['t'])? 'mdfiles' : trim($param['t'],'/');
+		$order = empty($param['order'])? '' : $param['order'];
 		if($dir == 'mdfiles' || $dir == 'publish'){
 			$this->vender->folder->down($dir);
 			$md = $this->vender->folder->scan('*.md');
@@ -91,7 +91,13 @@ class Markbox
 		}
 		$fold = (array)explode('/',$dir);
 		$fold = $fold[0];
-		$md->orderByTime();
+		if($order == 'name'){
+			$md->orderByName('desc');
+		}else if($order == 'time'){
+			$md->orderByTime('desc');
+		}else{
+			$md->orderByName('asc');
+		}
 		$list = $md->getList();
 		$sorttime = $md->getSorttime();
 		$title = $md->getTitle();
@@ -105,14 +111,18 @@ class Markbox
 		return $data;
 	}
 	
-	public function mdfolds($dir=''){
-		$dir = trim($dir,'/');
-		if(empty($dir)){
-			$dir = 'mdfiles';
-		}
+	public function mdfolds($param){
+		$dir = empty($param['t'])? 'mdfiles' : trim($param['t'],'/');
+		$order = empty($param['order'])? '' : $param['order'];
 		$this->vender->folder->down($dir);
 		$md = $this->vender->folder->get('*','dir');
-		$md->orderByTime();
+		if($order == 'name'){
+			$md->orderByName('desc');
+		}else if($order == 'time'){
+			$md->orderByTime('desc');
+		}else{
+			$md->orderByName('asc');
+		}
 		$list = $md->getList();
 
 		$sorttime = $md->getSorttime();
@@ -126,16 +136,26 @@ class Markbox
 		return $data;
 	}
 	
-	public function content($file){
+	public function content($param){
+		$file = empty($param['t'])? '' : $param['t'];
 		$path = $this->storagedir.$file;
 		if(!file_exists($path)){
 			throw new Exception("file not found",101);
 		}
-		$content = file_get_contents($path);
-		return $this->vender->parsedown->text($content);
+		$main = file_get_contents($path);
+		preg_match("|\# .*|",$main, $content);
+		if(empty($content[0])){
+			$title = array_shift(explode("\r\n",$content));
+		}else{
+			$title = $content[0];
+		}
+		$title = trim(str_replace('#','',$title));
+		$html = $this->vender->parsedown->text($main);
+		return array('title'=>$title,'html'=>$html);
 	}
 
-	public function mdcontent($file){
+	public function mdcontent($param){
+		$file = empty($param['t'])? '' : $param['t'];
 		$path = $this->storagedir.$file;
 		if(!file_exists($path)){
 			throw new Exception("file not found",101);
@@ -143,34 +163,58 @@ class Markbox
 		return file_get_contents($path);
 	}
 
-	public function addfile($name,$body){
+	public function addfile($param){
+		$name = empty($param['t'])? '' : $param['t'];
+		$body = empty($param['data'])? '' : $param['data'];
+		if(empty($body)){
+			throw new Exception("文件内容不能为空",101);
+		}
 		return $this->vender->folder->addFile($name,$body);
 	}
 
-	public function delfile($name){
+	public function delfile($param){
+		$name = empty($param['t'])? '' : $param['t'];
 		return $this->vender->folder->delFile($name);
 	}
 
-	public function addfold($name){
+	public function addfold($param){
+		$name = empty($param['t'])? '' : $param['t'];
 		$last = $this->downfolder($name);
 		return $this->vender->folder->create($last);
 	}
 
-	public function delfold($name){
+	public function delfold($param){
+		$name = empty($param['t'])? '' : $param['t'];
 		$last = $this->downfolder($name);
 		return $this->vender->folder->remove($last);
 	}
 
-	public function clean($name){
+	public function clean($param){
+		$name = empty($param['t'])? '' : $param['t'];
 		$last = $this->downfolder($name);
 		return $this->vender->folder->clean($last);
 	}
 
-	public function move($oldname,$newname){
-		return $this->vender->folder->rename($oldname,$newname);
+	public function move($param){
+		$file = empty($param['t'])? '' : $param['t'];
+		$tofold = empty($param['mv'])? '' : $param['mv'];
+		$filename = basename($file);
+		$tofold = $tofold.'/'.$filename;
+		return $this->vender->folder->rename($file,$tofold);
 	}
-
-	public function copy($oldname,$newname){
+	
+	public function rename($param){
+		$file = empty($param['t'])? '' : $param['t'];
+		$toname = empty($param['newname'])? '' : $param['newname'];
+		$last = (array)explode('/',$file);
+		$last = end($last);
+		$newname = str_replace($last,$toname,$file);
+		return $this->vender->folder->rename($file,$newname);
+	}
+	
+	public function copy($param){
+		$oldname = empty($param['t'])? '' : $param['t'];
+		$newname = empty($param['newname'])? '' : $param['newname'];
 		$path = $this->vender->folder->getPath();
 		$file = $path.$oldname;
 		if(!file_exists($file)){
@@ -191,6 +235,15 @@ class Markbox
 		}
 		
 		return $createname;
+	}
+	
+	public function makePage($page,$list){
+		$current = empty($page)? 1 : intval($page);
+		$total = count($list);
+		$this->vender->page->setPage($total,$current);
+		$limit = $this->vender->page->getLimit();
+		$list = array_slice($list,$limit[0],$limit[1]);
+		return array('page'=>$this->vender->page,'data'=>$list);
 	}
 
 	private function formattime($time){
@@ -215,5 +268,6 @@ class Markbox
 		}
 		return date('Y-M-d',$time);
 	}
+
 
 }

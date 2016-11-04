@@ -3,7 +3,7 @@
 		<div class="container write clearfix">
 			<div class="pull-left">
 				文件名：<code id="rename"><span id="path"></span>/<span id="filename" title="点击可修改" contenteditable="true"></span>.md</code>
-				<span id="info"></span>
+				<span id="info" style="color:#999;font-size:12px;"></span>
 			</div>
 			<div class="pull-right">
 				<span class="btn btn-xs" id="save"><i class="glyphicon glyphicon-hdd"></i> 保存</span>
@@ -19,13 +19,13 @@
 	$('#MarkDialog').slideDown();
 	var testEditor = null;
 	testEditor = editormd("test-editormd", {
-		width:"100%",
+		width:960,
 		height:920,
 		syncScrolling:"single",
 		path:"static/editor/lib/",
 		imageUpload:true,
 		imageFormats:["jpg", "jpeg", "gif", "png", "bmp"],
-		imageUploadURL:"/php/upload.php",
+		imageUploadURL:"./upload/upload.php",
 		emoji:true,
 		tex:true,
 		flowChart:true,
@@ -33,12 +33,17 @@
 	});
 
 	$('#save').click(save);
-	setInterval(save,10000)
+	var timer = setInterval(save,10000);
 
 	$('#close').click(function(){
 		$('#MarkDialog').slideUp('fast',function(){
-			document.getElementById('allMdfiles').click();
-			closeDialog()
+			if(isCreate){
+				document.querySelector('#firstMenu').querySelector('.active').click();
+			}else{
+				document.querySelector('#midList').querySelector('.active').click();
+			}
+			clearInterval(timer);
+			closeDialog();
 		});
 	});
 
@@ -68,10 +73,12 @@
 	});
 
 	getFilename();
+	var isCreate = true;
 	function getFilename(){
 		var filename = $('#filename').html();
 		var path = $('#path').html();
 		if(filename && path){
+			isCreate = false;
 			return {path:path,filename:filename};
 		}
 		var path = vue.queryParam;
@@ -94,6 +101,13 @@
 		$('#path').html(path);
 	}
 	
+	//保存快捷键 ctrl+s
+	$(document).keydown(function(e){
+		if( e.ctrlKey  == true && e.keyCode == 83 ){
+			save();
+			return false;
+		}
+	});
 	</script>
 </div>
 

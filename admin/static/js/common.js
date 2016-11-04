@@ -61,6 +61,9 @@ var vue = new Vue({
 				method:"GET",
 				dataType:"JSON",
 				success:function(rsp){
+					if(rsp.code != 200){
+						return that.dialog('alert',rsp.data);
+					}
 					that.mdlist = rsp.data;
 					that.listype = "mdfiles";
 					that.midloading = false;
@@ -74,6 +77,9 @@ var vue = new Vue({
 				method:"GET",
 				dataType:"JSON",
 				success:function(rsp){
+					if(rsp.code != 200){
+						return that.dialog('alert',rsp.data);
+					}
 					that.mdlist = rsp.data;
 					that.listype = "mdfolds";
 					that.midloading = false;
@@ -87,7 +93,10 @@ var vue = new Vue({
 				method:"GET",
 				dataType:'JSON',
 				success:function(rsp){
-					that.content = rsp.data;
+					if(rsp.code != 200){
+						return that.dialog('alert',rsp.data);
+					}
+					that.content = rsp.data.html;
 					that.contentloading = false;
 				}
 			});
@@ -98,6 +107,9 @@ var vue = new Vue({
 				method:"GET",
 				dataType:'JSON',
 				success:function(rsp){
+					if(rsp.code != 200){
+						return that.dialog('alert',rsp.data);
+					}
 					that.content = '';
 					for(var i in that.mdlist){
 						if(that.mdlist[i].file == that.queryParam){
@@ -107,12 +119,52 @@ var vue = new Vue({
 				}
 			});
 		},
-		dialog:function(name){
+		mvtorecycle:function(){
+			$.ajax({
+				url:'./ajax.php?mod=move&t='+that.queryParam+'&mv=recycles',
+				method:"GET",
+				dataType:'JSON',
+				success:function(rsp){
+					if(rsp.code != 200){
+						return that.dialog('alert',rsp.data);
+					}
+					that.content = '';
+					for(var i in that.mdlist){
+						if(that.mdlist[i].file == that.queryParam){
+							that.mdlist.$remove(that.mdlist[i]);
+						}
+					}
+				}
+			});
+		},
+		delFold:function(evt){
+			var fold = $(evt.target).attr('c-val');
+			if(!fold) return;
+			$.ajax({
+				url:'./ajax.php?mod=delfold&t='+fold,
+				method:"GET",
+				dataType:'JSON',
+				success:function(rsp){
+					if(rsp.code != 200){
+						return that.dialog('alert',rsp.data);
+					}
+					that.content = '';
+					for(var i in that.mdlist){
+						if(that.mdlist[i].file == fold){
+							that.mdlist.$remove(that.mdlist[i]);
+						}
+					}
+				}
+			});
+		},
+		dialog:function(name,msg){
 			$.ajax({
 				url:'./themes/dialogs/'+name+'.html',
 				method:"GET",
 				success:function(html){
-					$('body').append(html);
+					var ele = $(html);
+					if(msg) ele.find('#alertMsg').html(msg);
+					$('body').append(ele);
 				}
 			})
 		}
