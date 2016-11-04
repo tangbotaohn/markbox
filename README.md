@@ -15,6 +15,9 @@ wordpress 太重，HEXO 容易被墙，`Markbox` 简洁轻量无需复杂的安�
 2. cd 到 markbox 目录执行 `chmod -R 777 storages`
 3. 用浏览器访问项目 `/admin/` 页面按步骤进行安装
 
+# 案例
+[http://dooim.com](http://dooim.com)  
+
 # 使用到的开源库
 [Vue.js](http://vuejs.org)  
 [Bootstrap](http://getbootstrap.com/)  
