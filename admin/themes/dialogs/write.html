@@ -18,20 +18,25 @@
 	<script>
 	$('#MarkDialog').slideDown();
 	var testEditor = null;
-	testEditor = editormd("test-editormd", {
-		width:960,
-		height:920,
-		syncScrolling:"single",
-		path:"static/editor/lib/",
-		imageUpload:true,
-		imageFormats:["jpg", "jpeg", "gif", "png", "bmp"],
-		imageUploadURL:"./upload/upload.php",
-		emoji:true,
-		tex:true,
-		flowChart:true,
-		watch:false
-	});
-
+	var isCreate = true;
+	var presavedata = '';
+	
+	function createEditor(){
+		testEditor = editormd("test-editormd", {
+			width:960,
+			height:920,
+			syncScrolling:"single",
+			path:"static/editor/lib/",
+			imageUpload:true,
+			imageFormats:["jpg", "jpeg", "gif", "png", "bmp"],
+			imageUploadURL:"./upload/upload.php",
+			emoji:true,
+			tex:true,
+			flowChart:true,
+			watch:false
+		});
+	}
+	
 	$('#save').click(save);
 	var timer = setInterval(save,10000);
 
@@ -42,12 +47,13 @@
 			}else{
 				document.querySelector('#midList').querySelector('.active').click();
 			}
+			console.log(isCreate);
 			clearInterval(timer);
 			closeDialog();
 		});
 	});
 
-	var presavedata = '';
+	
 	function save(){
 		var data = testEditor.getMarkdown();
 		if(data == '' || data == presavedata) return;
@@ -73,30 +79,39 @@
 	});
 
 	getFilename();
-	var isCreate = true;
+	
 	function getFilename(){
 		var filename = $('#filename').html();
 		var path = $('#path').html();
 		if(filename && path){
-			isCreate = false;
 			return {path:path,filename:filename};
 		}
 		var path = vue.queryParam;
 		if(path.indexOf('.md') >= 0){
+			isCreate = false;
+			
 			$.ajax({
 				url:"./ajax.php?mod=mdcontent&t="+path,
 				method:"GET",
 				dataType:"JSON",
 				success:function(rsp){
-					$('#test-editormd textarea:first').val(rsp.data);
+					if(rsp.code != 200){
+						return alert(rsp.data);
+					}
+					presavedata = rsp.data
+					$('#test-editormd textarea:first').val(presavedata);
+					createEditor();
 				}
 			});
 			var arr = path.split('/');
 			filename = arr[arr.length-1].replace('.md','');
 			path = arr.slice(0,arr.length-1).join('/');
 		}else{
+			isCreate = true;
 			filename = 'autoname'+parseInt(Date.parse(new Date()) / 1000);
+			createEditor();
 		}
+		console.log(isCreate);
 		$('#filename').html(filename);
 		$('#path').html(path);
 	}

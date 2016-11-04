@@ -169,7 +169,7 @@ class Markbox
 		if(empty($body)){
 			throw new Exception("文件内容不能为空",101);
 		}
-		return $this->vender->folder->addFile($name,$body);
+		return $this->vender->folder->addFile($name,stripslashes($body));
 	}
 
 	public function delfile($param){

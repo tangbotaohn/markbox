@@ -6,4 +6,5 @@ $show = empty($_GET['page'])? 1 : intval($_GET['page']);
 $data = $markbox->makePage($show,$list);
 $list = $data['data'];
 $page = $data['page'];
+$settings = $markbox->config('settings');
 require 'storages/themes/default/index.html';
