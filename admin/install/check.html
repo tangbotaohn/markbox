@@ -34,14 +34,14 @@ table td,table th{text-align:center;}
 		<?php foreach($power as $k=>$v): ?>
 		<?php if(!$v['r'] || !$v['w']) $next = false; ?>
 		<tr>
-		<td><?= $k ?></td>
-		<td><span class="label label-<?= $classname[$v['r']] ?>"><?= $name[$v['r']] ?></span></td>
-		<td><span class="label label-<?= $classname[$v['w']] ?>"><?= $name[$v['w']] ?></span></td>
+		<td><?php echo $k ?></td>
+		<td><span class="label label-<?php echo $classname[$v['r']] ?>"><?php echo $name[$v['r']] ?></span></td>
+		<td><span class="label label-<?php echo $classname[$v['w']] ?>"><?php echo $name[$v['w']] ?></span></td>
 		</tr>
 		<?php endforeach; ?>
 	  </table>
 	</div>
-	<div style="text-align:center;"><a href="?step=settings" class="btn btn-<?= $classname[$next] ?>">下一步</a></div>
+	<div style="text-align:center;"><a href="?step=settings" class="btn btn-<?php echo $classname[$next] ?>">下一步</a></div>
 </div>
 </body>
 </html>

@@ -9,7 +9,8 @@ if(!$app->installed()){
 	response('未安装',1);
 }
 
-if(empty($app->getLogin())){
+$login = $app->getLogin();
+if(empty($login)){
 	response('未登录',2);
 }
 if(!ini_get('date.timezone')){

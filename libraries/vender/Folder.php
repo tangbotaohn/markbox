@@ -150,7 +150,7 @@ class Folder
         return true;
     }
 	
-	private $getModeObjects =  [];
+	private $getModeObjects =  array();
 	public function get($file='*', $type=''){
 		$key = $file.$type;
 		$mod = GLOB_NOSORT;
@@ -165,7 +165,7 @@ class Folder
 		return $this->getModeObjects[$key];
 	}
 	
-	private $scanModeObjects =  [];
+	private $scanModeObjects =  array();
 	public function scan($file='*', $type=''){
 		$key = $file.$type;
 		if($type == 'dir'){
