@@ -7,7 +7,7 @@
 .list-first{background:#f8f8f8;}
 .list-first .btn{color:#999;}
 .list-first .btn:hover{color:#666;}
-html,body{height:100%;overflow:hidden;}
+html,body{height:100%;}
 .body,.main{height:100%;}
 .main{padding-top:50px;}
 .left,.center,.right{height:100%;padding:0;}
@@ -22,8 +22,9 @@ html,body{height:100%;overflow:hidden;}
 .write{width:960px;}
 
 /*scroll*/
-#midList,#content{height:calc(100% - 56px);overflow-y:auto;}
+#midList,#content{height:calc(100% - 56px);overflow-y:auto;overflow-x:hidden;}
 .list-group{height:100%;}
+#content{padding:0 20px;}
 
 /*mid menu*/
 #midList .list-group-item .info{font-size:12px;color:#CCC;margin-top:10px;}
