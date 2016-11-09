@@ -3,10 +3,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">移动文件</h4>
+        <h4 class="modal-title">发布到</h4>
       </div>
       <div class="modal-body">
-		<label>将文件移至：</label>
+		<label>选择发布目录：</label>
         <select class="form-control" id="tofold"></select>
       </div>
       <div class="modal-footer">
@@ -22,14 +22,14 @@
 	});
 	
 	$.ajax({
-		url:"./ajax.php?mod=mdfolds&t=mdfiles",
+		url:"./ajax.php?mod=mdfolds&t=publish",
 		method:"GET",
 		dataType:"JSON",
 		success:function(rsp){
 			if(rsp.code != 200){
 				return alert(rsp.data);
 			}
-			var opt = '<option value="mdfiles">默认</option>';
+			var opt = '<option value="publish">默认</option>';
 			for(var i in rsp.data){
 				opt += '<option value="'+rsp.data[i].file+'">'+rsp.data[i].title+'</option>';
 			}
@@ -42,7 +42,7 @@
 		console.log(vue.queryParam,tofold);
 		if(tofold != ''){
 			$.ajax({
-				url:"./ajax.php?mod=move&t="+vue.queryParam+'&mv='+tofold,
+				url:"./ajax.php?mod=copy&t="+vue.queryParam+'&newname='+tofold,
 				method:"GET",
 				dataType:"JSON",
 				success:function(rsp){

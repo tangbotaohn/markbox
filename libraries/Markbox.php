@@ -220,8 +220,9 @@ class Markbox
 		if(!file_exists($file)){
 			throw new Exception("file not found",101);
 		}
+		$basename = basename($file);
 		$body = file_get_contents($file);
-		return $this->vender->publish->addFile($newname,$body);
+		return file_put_contents($path.$newname.'/'.$basename,$body);
 	}
 	
 	private function downfolder($name){
