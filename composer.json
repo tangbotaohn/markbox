@@ -1,0 +1,33 @@
+{
+    "name": "Markbox",
+    "description": "markdown blog wiki",
+    "keywords": ["markbox","markdown","blog", "wiki"],
+    "homepage": "http://github.com/tmkook/markbox",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Leon",
+            "email": "tmkook@gmail.com",
+            "homepage": "http://dooim.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0",
+		"erusev/parsedown":"*",
+		"aferrandini/phpqrcode": "1.0.1",
+		"gregwar/captcha": "1.*",
+		"cutephp/route": "~1.0",
+		"tmkook/folder": "dev-master"
+    },
+	"autoload" : {
+		"classmap" : [
+			"src/contexts/"
+		]
+	},
+	"repositories": {
+		"packagist": {
+			"type": "composer",
+			"url": "https://packagist.org"
+		}
+	}
+}

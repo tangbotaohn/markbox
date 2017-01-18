@@ -1,4 +1,2 @@
-storages/configs/settings.php
-storages/configs/users.php
-admin/php_errors.log
+vendor/
 php_errors.log
