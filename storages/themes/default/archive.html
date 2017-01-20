@@ -1,11 +1,20 @@
 <?php
-$files = $this->context->posts->getSubFiles($_GET);
-$total = count($files->files);
+$params = $_GET;
+$params['path'] = $path;
+if(empty($params['path'])){
+	$nav = '全部文章';
+	$files = $this->context->posts->getSubFiles($params);
+	$total = count($files->files);
+}else{
+	$nav = '分类：'.$params['path'];
+	$files = $this->context->posts->getSubFiles($params);
+	$total = count($files->files);
+}
 ?>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title><?php echo $this->context->config->get('siteinfo/sitename') ?></title>
+<title>分类：<?php echo $nav ?> - <?php echo $this->context->config->get('siteinfo/sitename') ?></title>
 <link rel="stylesheet" href="<?php echo $this->themeuri ?>css/bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo $this->themeuri ?>css/home.css">
 </head>
@@ -17,7 +26,7 @@ $total = count($files->files);
 	<div class="col-md-8 col-sm-12">
 	  <div class="panel panel-default">
 		<div class="panel-heading">
-		  <h3 class="panel-title">最新文章（共<?php echo $total ?>篇）</h3>
+		  <h3 class="panel-title"><?php echo $nav ?>（共<?php echo $total ?>篇）</h3>
 		</div>
 		<ul class="list-group">
 		  <?php foreach($files->news as $item): ?>
@@ -29,7 +38,8 @@ $total = count($files->files);
 		</div>
 	  </div>
 	</div>
-	<div class="col-md-2"></div>
+	<div class="col-md-2">
+	</div>
   </div>
 </div>
 <?php $this->render('widget/footer.html'); ?>

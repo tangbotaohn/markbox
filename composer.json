@@ -14,8 +14,6 @@
     "require": {
         "php": ">=5.5.0",
 		"erusev/parsedown":"*",
-		"aferrandini/phpqrcode": "1.0.1",
-		"gregwar/captcha": "1.*",
 		"cutephp/route": "~1.0",
 		"tmkook/folder": "dev-master"
     },
@@ -23,11 +21,5 @@
 		"classmap" : [
 			"src/contexts/"
 		]
-	},
-	"repositories": {
-		"packagist": {
-			"type": "composer",
-			"url": "https://packagist.org"
-		}
 	}
 }

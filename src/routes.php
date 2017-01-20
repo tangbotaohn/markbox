@@ -1,21 +1,36 @@
 <?php
-$router->get('/',function(){
-	print_r($this->posts->get());
+$router->get('/',function($context){
+	$context->theme->render('index.html');
 });
 
-$router->get('/posts/:file?',function(){
-	$file = $this->request->getParams();
-	$file = $file['file'];
-	return $this->posts->html($file);
+$router->get('/archive/:path?',function($context){
+	$assign = $context->request->getParams();
+	if(empty($assign['path'])){
+		$assign['path'] = '';
+	}
+	$context->theme->render('archive.html',$assign);
 });
 
-$router->add('/rest/:api',function(){
-	$request = $this->request->getParams();
+$router->get('/categories/:path?',function($context){
+	$assign = $context->request->getParams();
+	if(empty($assign['path'])){
+		$assign['path'] = '';
+	}
+	$context->theme->render('categories.html',$assign);
+});
+
+$router->get('/posts/:file',function($context){
+	$assign = $context->request->getParams();
+	$context->theme->render('posts.html',$assign);
+});
+
+$router->add('/rest/:api',function($context){
+	$request = $context->request->getParams();
 	$request = $request['api'];
 	$method = $_SERVER['REQUEST_METHOD'];
 	$params = $method == 'GET' || $method == 'DELETE'? $_GET : $_POST;
 	require 'models/Api.php';
-	$api = new Markbox\Api($this);
+	$api = new Markbox\Api($context);
 	if( ! method_exists($api,$request)){
 		throw new Exception('api not found',404);
 	}
@@ -25,4 +40,3 @@ $router->add('/rest/:api',function(){
 		return $api->$request($params);
 	}
 })->via(array('get','post','delete','put'));
-

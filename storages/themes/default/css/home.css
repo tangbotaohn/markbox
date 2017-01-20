@@ -1,0 +1,9 @@
+body{font-family:"Arial","Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;font-size: 16px;overflow-x:hidden;}
+li.title a{display: block;overflow:hidden;}
+li.title a span{float:right;color:#999;}
+li.title{cursor:pointer;font-size:14px;line-height:22px;}
+li.title:hover {background-color: #F1F1F1;}
+.panel {border-radius: 0;}
+.panel-default > .panel-heading{background-image: none;background-color: #fff;}
+.navbar-default{background-image: none;background-color: #fff;box-shadow: none;}
+.page{text-align:center;}

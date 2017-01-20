@@ -1,8 +1,6 @@
 <?php
 require 'vendor/autoload.php';
-
 define('__BASEPATH__',dirname(__FILE__));
-
 $app = new App;
 $app->run();
 
@@ -16,7 +14,8 @@ class App
 	
 	public function run(){
 		//route match
-		$router = new CutePHP\Route\Router();
+		
+		$router = new CutePHP\Route\Router;
 		require 'src/routes.php';
 		$uri = (array)explode('?',$_SERVER['REQUEST_URI']);
 		$uri = $uri[0];
@@ -30,8 +29,7 @@ class App
 		$callable = $request->getStorage();
 		$this->context->request = $request;
 		if ($callable instanceof Closure) {
-            $callable = $callable->bindTo($this->context);
-			$data = $callable();
+			$data = $callable($this->context);
 			if(is_array($data)){
 				echo json_encode(array('code'=>1,'errno'=>0,'data'=>$data));
 			}else if(is_bool($data)){

@@ -1,0 +1,19 @@
+<?php
+$article = $this->context->posts->getHtml($file);
+?>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title><?php echo $article['title'].' - '.$this->context->config->get('siteinfo/sitename') ?></title>
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/home.css">
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/main.css">
+</head>
+<body>
+<?php $this->render('widget/header.html'); ?>
+  <div class="markdown-body">
+	<?php echo $article['content']; ?>
+  </div>
+<?php $this->render('widget/footer.html'); ?>
+</body>
+</html>

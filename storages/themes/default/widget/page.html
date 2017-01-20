@@ -1,0 +1,11 @@
+<div class="page">
+	<a href="<?php echo $this->url('/') ?>">上一页</a>
+	<?php foreach($page->getBack() as $back): ?>
+	<a href="<?php echo $back ?>"><?php echo $back ?></a>
+	<?php endforeach; ?>
+	<a href="<?php echo $page->getShow() ?>"><?php echo $page->getShow() ?></a>
+	<?php foreach($page->getGoing() as $going): ?>
+	<a href="<?php echo $going ?>"><?php echo $going ?></a>
+	<?php endforeach; ?>
+	<a href="<?php echo $this->url('/') ?>">下一页</a>
+</div>

@@ -2,8 +2,10 @@
 class Api
 {
 	private $context;
+	private $publish;
 	public function __construct($context){
 		$this->context = $context;
+		$this->publish = __BASEPATH__.'/storages/publish/';
 	}
 	
 	public function state(){
@@ -92,6 +94,22 @@ class Api
 		$users = array_values($users);
 		$this->context->config->set('users',$users);
 		return $this->context->config->save('users');
+	}
+	
+	public function addFolder($params){
+		$this->context->auth->check(1);
+		$this->context->folder->open($this->publish);
+		$path = (array)explode('/',trim($params['path'],'/'));
+		foreach($path as $dir){
+			$this->context->folder->create($dir);
+			$this->context->folder->entry($dir);
+		}
+		return true;
+	}
+	
+	public function addFile($params){
+		$this->context->folder->open($this->publish);
+		return $this->context->folder->addFile($params['file'],$params['content']);
 	}
 }
 

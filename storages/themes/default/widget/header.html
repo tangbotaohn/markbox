@@ -1,0 +1,26 @@
+<div class="navbar navbar-default navbar-fixed-top" style="opacity:0.9" role="navigation">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="<?php echo $this->url('') ?>"><?php echo $this->context->config->get('siteinfo/sitename') ?></a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li <?php if($this->context->request->getUri() == '/'): ?>class="active"<?php endif; ?>>
+					<a href="<?php echo $this->url('') ?>">首页</a>
+				</li>
+				<li <?php if($this->context->request->getUri() == '/categories/:path?'): ?>class="active"<?php endif; ?>>
+					<a href="<?php echo $this->url('categories') ?>">分类</a>
+				</li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</div>
