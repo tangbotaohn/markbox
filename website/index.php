@@ -18,8 +18,9 @@ class App
     {
         $router = new CutePHP\Route\Router();
         require 'src/routes.php';
+		$self = str_replace('/index.php','',$_SERVER['PHP_SELF']);
         $uri = (array) explode('?', $_SERVER['REQUEST_URI']);
-        $uri = $uri[0];
+        $uri = str_replace($self,'',$uri[0]);
         $method = $_SERVER['REQUEST_METHOD'];
         $request = $router->match($uri, $method);
         if (empty($request)) {

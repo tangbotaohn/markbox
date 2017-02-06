@@ -9,9 +9,9 @@
 
 ## 部署网站
 
-1. 将 `website` 文件夹上传至Web服务器根目录。
+1. 下载安装包将 `website` 文件夹上传至Web服务器根目录。
 2. linux或unix系统需设置 `website/storages` 目录读写权限，Windows系统可跳过这一步骤。
-3. 访问网站 `http://example.com/website/` 完成安装。
+3. 执行 `php markbox.php -m init` 完成安装，参考「初始化管理」
 
 ## 初始化管理
 本地打开终端进入到 `client` 目录执行 `php markdown.php -m init` 命令，代码如下：

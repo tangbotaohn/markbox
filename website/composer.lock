@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "46164a91ee58d8a29a9bb2ea512ec9d6",
+    "content-hash": "5ba5292f325fa4fd3b491381ad4af31c",
     "packages": [
         {
             "name": "cutephp/route",
@@ -87,12 +87,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tmkook/folder.git",
-                "reference": "b98022281066b7e67343a514a391fa3ebb85817a"
+                "reference": "fc7cba237b3626aac119ddaa7a9b8fcc59c50b83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tmkook/folder/zipball/b98022281066b7e67343a514a391fa3ebb85817a",
-                "reference": "b98022281066b7e67343a514a391fa3ebb85817a",
+                "url": "https://api.github.com/repos/tmkook/folder/zipball/fc7cba237b3626aac119ddaa7a9b8fcc59c50b83",
+                "reference": "fc7cba237b3626aac119ddaa7a9b8fcc59c50b83",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +122,7 @@
                 "folder",
                 "markbox"
             ],
-            "time": "2017-01-18 09:32:08"
+            "time": "2017-02-06 06:41:38"
         }
     ],
     "packages-dev": [],

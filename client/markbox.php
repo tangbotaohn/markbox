@@ -2,7 +2,8 @@
 
 $args = getopt('m:p:');
 if (empty($args['m'])) {
-    exit('-m invalid');
+    response('-m invalid');
+	exit;
 }
 
 $http = new ApiRequest();
@@ -17,8 +18,9 @@ switch ($args['m']):
         $save = array('url' => $url, 'user' => $user, 'password' => $password);
         savetmp(json_encode($save));
         $state = json_decode($http->get('rest/state'));
-        if (!$state->data->storages) {
-            exit('run chmod -r 777 storages');
+        if ( ! $state->data->storages) {
+            response('run chmod -r 777 storages');
+			exit;
         }
         if (!$state->data->users) {
             if (!$state->data->settings) {
@@ -90,11 +92,25 @@ switch ($args['m']):
             $folder->open($path);
             $files = $folder->getSubFiles();
             $dir = basename($path);
+			$publishes = array();
             foreach ($files as $file) {
-                $filename = $dir.'/'.basename($file);
-                $params = array('file' => $filename, 'content' => file_get_contents($file));
-                response($http->post('rest/publish', $params));
+                $filename = $dir.'/'.trim(str_replace($path,'',$file),'/');
+				$publishes[] = array('filename'=>$filename,'file'=>$file);
+				response($filename);
             }
+			unset($files,$file);
+			response("total: (".count($publishes).") files confirm publish? (Y|N)");
+			$isConfirm = trim(fgets(STDIN));
+			if($isConfirm == 'y'){
+				foreach($publishes as $item){
+					$params = array('file' => $item['filename'], 'content' => file_get_contents($item['file']));
+					$result = $http->post('rest/publish', $params);
+					echo $item['filename']."  ";
+					response($result);
+				}
+			}else{
+				response("Canceled");
+			}
         } else {
             $params = array('file' => basename($path), 'content' => file_get_contents($path));
             response($http->post('rest/publish', $params));
@@ -102,13 +118,20 @@ switch ($args['m']):
     break;
     case 'remove':
         if (empty($args['p']) || strpos($args['p'], 'posts') < 0) {
-            exit('-p invalid, please paste posts url');
+            response('-p invalid, please paste posts url');
+			exit;
         }
         $url = $args['p'];
         $params = parse_url($url);
         $path = str_replace('-', '/', basename($params['path']));
-        $params = array('file' => $path);
-        response($http->post('rest/remove', $params));
+		response("confirm remove {$path}? (Y|N)");
+		$isConfirm = trim(fgets(STDIN));
+		if($isConfirm == 'y'){
+			$params = array('file' => $path);
+			response($http->post('rest/remove', $params));
+		}else{
+			response("Canceled");
+		}
     break;
     default:
 echo "

@@ -162,7 +162,7 @@ class Api
             $folder->entry($dir);
         }
 
-        return $folder->addFile($file, $params['content']);
+        return $folder->addFile($file, stripslashes($params['content']));
     }
 
     public function remove($params)
