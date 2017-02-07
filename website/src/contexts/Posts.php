@@ -140,6 +140,9 @@ class Posts
     {
         $file = urldecode($file);
         $file = $this->uri2path($file).'.md';
+		if(!file_exists($file)){
+			return false;
+		}
         $info = new \Tmkook\FolderInfo(array($file));
         $file = $info->get();
         $file = $file[0];
@@ -152,6 +155,9 @@ class Posts
     {
         $file = urldecode($file);
         $file = $this->uri2path($file).'.md';
+		if(!file_exists($file)){
+			return false;
+		}
         $info = new \Tmkook\FolderInfo(array($file));
         $file = $info->get();
         $file = $file[0];
