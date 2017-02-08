@@ -15,10 +15,13 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-right">
 				<li <?php if($this->context->request->getUri() == '/'): ?>class="active"<?php endif; ?>>
-					<a href="<?php echo $this->url('') ?>">首页</a>
+					<a href="<?php echo $this->url('') ?>">Home</a>
 				</li>
 				<li <?php if($this->context->request->getUri() == '/categories/:path?'): ?>class="active"<?php endif; ?>>
-					<a href="<?php echo $this->url('categories') ?>">分类</a>
+					<a href="<?php echo $this->url('categories') ?>">Archive</a>
+				</li>
+				<li <?php $params = $this->context->request->getParams();if($params['file'] == 'about'): ?>class="active"<?php endif; ?>>
+					<a href="<?php echo $this->url('posts/about') ?>">About</a>
 				</li>
 			</ul>
 		</div><!-- /.navbar-collapse -->

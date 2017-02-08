@@ -91,10 +91,9 @@ switch ($args['m']):
             $folder = new Folder();
             $folder->open($path);
             $files = $folder->getSubFiles();
-            $dir = basename($path);
 			$publishes = array();
             foreach ($files as $file) {
-                $filename = $dir.'/'.trim(str_replace($path,'',$file),'/');
+                $filename = trim(str_replace($path,'',$file),'/');
 				$publishes[] = array('filename'=>$filename,'file'=>$file);
 				response($filename);
             }

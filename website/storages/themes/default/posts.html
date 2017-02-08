@@ -5,9 +5,9 @@ $article = $this->context->posts->getHtml($file);
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title><?php echo $article['title'].' - '.$this->context->config->get('siteinfo/sitename') ?></title>
-<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/bootstrap.min.css">
-<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/home.css">
-<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/main.css">
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>assets/layout/home.css">
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>assets/layout/main.css">
 </head>
 <body>
 <?php $this->render('widget/header.html'); ?>

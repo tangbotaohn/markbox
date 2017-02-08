@@ -14,7 +14,7 @@
 3. 执行 `php markbox.php -m init` 完成安装，参考「初始化管理」
 
 ## 初始化管理
-本地打开终端进入到 `client` 目录执行 `php markdown.php -m init` 命令，代码如下：
+本地打开终端进入到 `client` 目录执行 `php markbox.php -m init` 命令，代码如下：
 ```
 cd ./client/
 php markbox.php -m init

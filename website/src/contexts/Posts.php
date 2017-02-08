@@ -34,7 +34,22 @@ class Posts
         $files = $this->folder->getSubFiles('*.md');
         $sort = new \Tmkook\FolderInfo($files);
         $files = $sort->setOrder($params['field'], $params['order'])->get();
+		$ignore_file = $this->context->config->get('settings/ignore_file');
+		$ignore_folder = $this->context->config->get('settings/ignore_folder');
         foreach ($files as $k => $v) {
+			if(!empty($ignore_file)){
+				if(strpos($ignore_file,$v['name']) > -1){
+					unset($files[$k]);
+					continue;
+				}
+			}
+			if(!empty($ignore_folder)){
+				$path = (array)explode('/',str_replace($this->publish,'',$v['path']));
+				if(strpos($ignore_folder,$path[0]) > -1){
+					unset($files[$k]);
+					continue;
+				}
+			}
             $files[$k]['uri'] = $this->path2uri($v['path']);
         }
         $obj = new \Context();
@@ -64,7 +79,22 @@ class Posts
         $files = $this->folder->getFiles('*.md');
         $sort = new \Tmkook\FolderInfo($files);
         $files = $sort->setOrder($params['field'], $params['order'])->get();
+		$ignore = $this->context->config->get('settings/ignore_file');
+		$ignore_folder = $this->context->config->get('settings/ignore_folder');
         foreach ($files as $k => $v) {
+			if(!empty($ignore)){
+				if(strpos($ignore,$v['name']) > -1){
+					unset($files[$k]);
+					continue;
+				}
+			}
+			if(!empty($ignore_folder)){
+				$path = (array)explode('/',str_replace($this->publish,'',$v['path']));
+				if(strpos($ignore_folder,$path[0]) > -1){
+					unset($files[$k]);
+					continue;
+				}
+			}
             $files[$k]['uri'] = $this->path2uri($v['path']);
         }
         $obj = new \Context();
@@ -94,7 +124,14 @@ class Posts
         $files = $this->folder->getFolders();
         $sort = new \Tmkook\FolderInfo($files);
         $files = $sort->setOrder($params['field'], $params['order'])->get();
+		$ignore = $this->context->config->get('settings/ignore_folder');
         foreach ($files as $k => $v) {
+			if(!empty($ignore)){
+				if(strpos($ignore,$v['name']) > -1){
+					unset($files[$k]);
+					continue;
+				}
+			}
             $files[$k]['uri'] = $this->path2uri($v['path']);
         }
         $obj = new \Context();
@@ -124,7 +161,14 @@ class Posts
         $files = $this->folder->getSubFolders();
         $sort = new \Tmkook\FolderInfo($files);
         $files = $sort->setOrder($params['field'], $params['order'])->get();
+		$ignore = $this->context->config->get('settings/ignore_folder');
         foreach ($files as $k => $v) {
+			if(!empty($ignore)){
+				if(strpos($ignore,$v['name']) > -1){
+					unset($files[$k]);
+					continue;
+				}
+			}
             $files[$k]['uri'] = $this->path2uri($v['path']);
         }
         $obj = new \Context();
@@ -173,8 +217,9 @@ class Posts
         $basedir = trim(str_replace($this->publish, '', dirname($path)), '/');
         preg_match_all('|<img src="([\w\/]*\.\w+)"|', $html, $match);
         $match = $match[1];
+		$host = trim($this->context->config->get('settings/host'),'/').'/';
         foreach ($match as $url) {
-            $html = str_replace($url, "/storages/publish/{$basedir}/".trim($url, '/'), $html);
+            $html = str_replace($url, $host."storages/publish/{$basedir}/".trim($url, '/'), $html);
         }
 
         return $html;

@@ -1,19 +1,9 @@
-body {
-    font-family:"Arial","Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
-    font-size: 16px;
-    margin: 5% 20% 5% 20%;
-    padding: 2% 5% 5% 5%;
-    width: 50%;
-    line-height: 150%;
-    border: 1px solid LightGrey;
-}
-
 .markdown-body {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   color: #333;
   font-size: 16px;
-  line-height: 1.6;
+  line-height:160%;
   word-wrap: break-word;
 }
 

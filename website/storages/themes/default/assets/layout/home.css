@@ -1,0 +1,20 @@
+body{font-family:Arial,sans-serif,"Microsoft YaHei";}
+li.title a{display: block;overflow:hidden;}
+li.title a span{float:right;color:#999;}
+li.title{cursor:pointer;font-size:14px;line-height:22px;}
+li.title:hover {background-color: #F1F1F1;}
+.panel {border-radius: 0;}
+.panel-default > .panel-heading{background-image: none;background-color: #fefefe;}
+.navbar-default{background-image: none;background-color: #fff;box-shadow: none;}
+.page{text-align:center;}
+
+.footer{padding:20px 0;text-align:center;font-size:12px;color:#999;}
+
+
+.markdown-body {
+	width:50%;
+	padding:2.5% 3%;
+	margin:0 auto;
+	margin-top:80px;
+    border: 1px solid LightGrey;
+}

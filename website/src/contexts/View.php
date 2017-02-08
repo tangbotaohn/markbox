@@ -17,7 +17,7 @@ class View
 		}
         $this->host = trim($context->config->get('settings/host'),'/').'/';
         $this->themepath = __BASEPATH__.'/storages/themes/'.$theme.'/';
-        $this->themeuri = '/storages/themes/'.$theme.'/';
+        $this->themeuri = $this->host.'storages/themes/'.$theme.'/';
     }
 
     public function redirect($uri)

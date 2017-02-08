@@ -1,12 +1,18 @@
 <?php
 $params = $_GET;
 $params['path'] = $path;
+if(empty($params['field'])){
+	$params['field'] = 'name';
+}
+if(empty($params['order'])){
+	$params['order'] = 'asc';
+}
 if(empty($params['path'])){
 	$nav = '全部文章';
 	$files = $this->context->posts->getSubFiles($params);
 	$total = count($files->files);
 }else{
-	$nav = '分类：'.$params['path'];
+	$nav = '归档：'.$params['path'];
 	$files = $this->context->posts->getSubFiles($params);
 	$total = count($files->files);
 }
@@ -14,9 +20,9 @@ if(empty($params['path'])){
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>分类：<?php echo $nav ?> - <?php echo $this->context->config->get('siteinfo/sitename') ?></title>
-<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/bootstrap.min.css">
-<link rel="stylesheet" href="<?php echo $this->themeuri ?>css/home.css">
+<title><?php echo $nav ?> - <?php echo $this->context->config->get('siteinfo/sitename') ?></title>
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo $this->themeuri ?>assets/layout/home.css">
 </head>
 <body>
 <?php $this->render('widget/header.html'); ?>
