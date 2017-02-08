@@ -132,6 +132,10 @@ switch ($args['m']):
 			response("Canceled");
 		}
     break;
+	case 'backup':
+		$url = $http->get('rest/backup');
+		exec('wget '.$url);
+	break;
     default:
 echo "
 -m init  登录

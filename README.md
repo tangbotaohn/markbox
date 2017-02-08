@@ -61,4 +61,6 @@ php markbox.php -m settings -p [field]
 php markbox.php -m siteinfo
 设置站点信息：  
 php markbox.php -m siteinfo -p [field]
+备份：  
+php markbox.php -m backup
 ```

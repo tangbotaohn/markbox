@@ -180,6 +180,15 @@ class Api
             return false;
         }
     }
+	
+	public function backup(){
+		$this->context->auth->check(0);
+		chdir(__BASEPATH__.'/storages');
+		$backname = date('Y-m-d').'.zip';
+		exec("zip -r ./system/{$backname} ./publish/");
+		$host = $this->context->config->get('settings/host');
+		return $host.'/storages/system/'.$backname;
+	}
 }
 
 class ApiException extends \Exception
