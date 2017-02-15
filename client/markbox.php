@@ -139,12 +139,15 @@ switch ($args['m']):
     default:
 echo "
 -m init  登录
--m state 状态
+-m state 站点状态
 -m users 用户列表
 -m users -p add 添加用户,level=0 is admin
 -m users -p del 删除用户
 -m siteinfo 站点信息
 -m siteinfo -p [field] 修改站点信息\r\n
+-m settings 设置信息\r\n
+-m settings -p [field] 修改设置\r\n
+-m backup 备份\r\n
 ";
     break;
 endswitch;

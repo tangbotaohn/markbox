@@ -20,7 +20,7 @@
 				<li <?php if($this->context->request->getUri() == '/categories/:path?'): ?>class="active"<?php endif; ?>>
 					<a href="<?php echo $this->url('categories') ?>">Archive</a>
 				</li>
-				<li <?php $params = $this->context->request->getParams();if($params['file'] == 'about'): ?>class="active"<?php endif; ?>>
+				<li <?php $params = $this->context->request->getParams();if(isset($params['file']) && $params['file'] == 'about'): ?>class="active"<?php endif; ?>>
 					<a href="<?php echo $this->url('posts/about') ?>">About</a>
 				</li>
 			</ul>

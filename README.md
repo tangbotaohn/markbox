@@ -6,11 +6,7 @@
 支持子账号，本地备份，主题插件等丰富的自定义配置，
 适用于个人博客、开发文档、企业WIKI等场景。
 
-源码下载：[http://dooim.com/](http://dooim.com/)
-
-用户手册：[http://dooim.com/blog/archive/markbox](http://dooim.com/blog/archive/markbox)
-
-演示地址：[http://dooim.com/blog/](http://dooim.com/blog/)
+官网：[http://dooim.com/](http://dooim.com/)
 
 ### 全部命令预览
 参数解释：

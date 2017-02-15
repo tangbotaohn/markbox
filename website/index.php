@@ -18,7 +18,8 @@ class App
     {
         $router = new CutePHP\Route\Router();
         require 'src/routes.php';
-		$self = str_replace('/index.php','',$_SERVER['PHP_SELF']);
+		$self = explode('/index.php',$_SERVER['PHP_SELF']);
+		$self = $self[0];
         $uri = (array) explode('?', $_SERVER['REQUEST_URI']);
         $uri = str_replace($self,'',$uri[0]);
         $method = $_SERVER['REQUEST_METHOD'];
@@ -31,24 +32,18 @@ class App
         $callable = $request->getStorage();
         $this->context->request = $request;
         if ($callable instanceof Closure) {
-            try {
-                $data = $callable($this->context);
-                if (is_array($data)) {
-                    echo json_encode(array('code' => 1, 'data' => $data));
-                } elseif (is_bool($data)) {
-                    if ($data) {
-                        echo json_encode(array('code' => 1, 'data' => 'success'));
-                    } else {
-                        echo json_encode(array('code' => 0, 'errno' => 0, 'data' => 'fail'));
-                    }
-                } else {
-                    echo $data;
-                }
-            } catch (Exception $e) {
-                echo json_encode(array('code' => -1, 'errno' => $e->getCode(), 'data' => $e->getMessage()));
-            } catch (FolderException $e) {
-                echo json_encode(array('code' => -2, 'errno' => $e->getCode(), 'data' => $e->getMessage()));
-            }
+			$data = $callable($this->context);
+			if (is_array($data)) {
+				echo json_encode(array('code' => 1, 'data' => $data));
+			} elseif (is_bool($data)) {
+				if ($data) {
+					echo json_encode(array('code' => 1, 'data' => 'success'));
+				} else {
+					echo json_encode(array('code' => 0, 'errno' => 0, 'data' => 'fail'));
+				}
+			} else {
+				echo $data;
+			}
         } else {
             echo $callable;
         }

@@ -16,7 +16,7 @@ class Posts
         $this->context = $context;
     }
 
-    public function getSubFiles($params = array())
+    public function getSubFiles($params = array(),$ignore=true)
     {
         if (empty($params['page'])) {
             $params['page'] = 1;
@@ -37,13 +37,13 @@ class Posts
 		$ignore_file = $this->context->config->get('settings/ignore_file');
 		$ignore_folder = $this->context->config->get('settings/ignore_folder');
         foreach ($files as $k => $v) {
-			if(!empty($ignore_file)){
+			if(!empty($ignore_file) && $ignore){
 				if(strpos($ignore_file,$v['name']) > -1){
 					unset($files[$k]);
 					continue;
 				}
 			}
-			if(!empty($ignore_folder)){
+			if(!empty($ignore_folder) && $ignore){
 				$path = (array)explode('/',str_replace($this->publish,'',$v['path']));
 				if(strpos($ignore_folder,$path[0]) > -1){
 					unset($files[$k]);
@@ -224,6 +224,19 @@ class Posts
 
         return $html;
     }
+	
+	public function makeSummary($files){
+		foreach($files as $k=>$file){
+			$content = str_replace($file['title'],'',file_get_contents($file['path']));
+			if(mb_strwidth($content, 'utf8') > 10){
+				$content = mb_strimwidth($content, 0, 200, '...', 'utf8');
+			}
+			$content = preg_replace('|[#\+\-\*]|','',$content);
+			$files[$k]['summary'] = htmlspecialchars($content);
+		}
+		
+		return $files;
+	}
 
     private function uri2path($url)
     {

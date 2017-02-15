@@ -1,5 +1,9 @@
 <?php
 $article = $this->context->posts->getHtml($file);
+if($article === false){
+	$this->render('404.html');
+	exit;
+}
 ?>
 <html>
 <head>
@@ -12,12 +16,16 @@ $article = $this->context->posts->getHtml($file);
 <body>
 <?php $this->render('widget/header.html'); ?>
 <div class="markdown-body">
-	<?php if($article === false): ?>
-		<?php $this->render('404.html'); ?>
-	<?php else: ?>
-		<?php echo $article['content']; ?>
-	<?php endif; ?>
+	<?php echo $article['content']; ?>
 </div>
+
+<div class="markdown-body" style="border:none;padding:0;">
+	<!-- UY BEGIN -->
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js"></script>
+	<!-- UY END -->
+</div>
+
 <?php $this->render('widget/footer.html'); ?>
 </body>
 </html>

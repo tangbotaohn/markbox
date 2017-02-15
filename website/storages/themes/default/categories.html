@@ -7,7 +7,12 @@ if(empty($params['field'])){
 if(empty($params['order'])){
 	$params['order'] = 'asc';
 }
-$files = $this->context->posts->getFolders($params);
+try{
+	$files = $this->context->posts->getFolders($params);
+} catch (Exception $e) {
+	$this->render('404.html');
+	exit;
+}
 ?>
 <html>
 <head>

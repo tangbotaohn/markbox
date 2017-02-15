@@ -7,14 +7,19 @@ if(empty($params['field'])){
 if(empty($params['order'])){
 	$params['order'] = 'asc';
 }
-if(empty($params['path'])){
-	$nav = '全部文章';
-	$files = $this->context->posts->getSubFiles($params);
-	$total = count($files->files);
-}else{
-	$nav = '归档：'.$params['path'];
-	$files = $this->context->posts->getSubFiles($params);
-	$total = count($files->files);
+try{
+	if(empty($params['path'])){
+		$nav = '全部文章';
+		$files = $this->context->posts->getSubFiles($params,false);
+		$total = count($files->files);
+	}else{
+		$nav = '归档：'.$params['path'];
+		$files = $this->context->posts->getSubFiles($params,false);
+		$total = count($files->files);
+	}
+}catch(Exception $e){
+	$this->render('404.html');
+	exit;
 }
 ?>
 <html>
