@@ -12,9 +12,6 @@ class View
     {
         $this->context = $context;
         $theme = $context->config->get('settings/theme');
-		if(empty($theme)){
-			exit('please run php markbox.php -m init');
-		}
         $this->host = trim($context->config->get('settings/host'),'/').'/';
         $this->themepath = __BASEPATH__.'/storages/themes/'.$theme.'/';
         $this->themeuri = $this->host.'storages/themes/'.$theme.'/';
