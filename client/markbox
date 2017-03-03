@@ -17,6 +17,7 @@ switch ($args['m']):
         $password = fgetpwd();
         $save = array('url' => $url, 'user' => $user, 'password' => $password);
         savetmp(json_encode($save));
+		$http->init();
         $state = json_decode($http->get('rest/state'));
         if ( ! $state->data->storages) {
             response('run chmod -r 777 storages');
@@ -223,9 +224,13 @@ class ApiRequest
     private $ch;
     public $baseUrl;
     public $responseInfo;
-    public function __construct()
+	public function __construct(){
+		$this->init();
+	}
+    public function init()
     {
         $tmp = json_decode(gettmp());
+		if(empty($tmp)) return;
         // set the base URL for the API endpoint
         $this->baseUrl = $tmp->url;
         // initialize the cURL resource
